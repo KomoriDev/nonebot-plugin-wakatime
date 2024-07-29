@@ -17,7 +17,7 @@ async def render(data: WakaTime) -> bytes:
 
     if config.background_source == "default":
         background_image = image_to_base64(default_background)
-    elif config.background_source == "LoliApi":
+    elif config.background_source == "LoliAPI":
         background_image = "https://www.loliapi.com/acg/pe/"
     else:
         background_image = await get_lolicon_image()
