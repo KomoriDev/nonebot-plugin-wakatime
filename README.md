@@ -28,6 +28,38 @@ _✨ NoneBot Wakatime 查询插件✨_
 
 NoneBot Wakatime 查询插件。将你的代码统计嵌入 Bot 中
 
+## 💿 安装
+
+以下提到的方法任选 **其一** 即可
+
+<details open>
+<summary>[推荐] 使用 nb-cli 安装</summary>
+在 Bot 的根目录下打开命令行, 输入以下指令即可安装
+
+```shell
+nb plugin install nonebot-plugin-wakatime
+```
+
+</details>
+<details>
+<summary>使用包管理器安装</summary>
+
+```shell
+pip install nonebot-plugin-wakatime
+# or, use poetry
+poetry add nonebot-plugin-wakatime
+# or, use pdm
+pdm add nonebot-plugin-wakatime
+```
+
+打开 NoneBot 项目根目录下的配置文件, 在 `[plugin]` 部分追加写入
+
+```toml
+plugins = ["nonebot_plugin_wakatime"]
+```
+
+</details>
+
 ## ⚙️ 配置
 
 在项目的配置文件中添加下表中的可选配置
