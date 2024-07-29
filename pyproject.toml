@@ -21,6 +21,9 @@ adapters = [
     "nonebot-adapter-onebot>=2.4.4",
     "nonebot-adapter-telegram>=0.1.0b17",
 ]
+tests = [
+    "viztracer>=0.16.3",
+]
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
