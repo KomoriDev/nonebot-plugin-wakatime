@@ -1,3 +1,4 @@
+import asyncio
 from urllib.parse import parse_qs
 
 from nonebot import require
@@ -61,9 +62,14 @@ async def _(event: Event, target: Match[At | int]):
         target_id = event.get_user_id()
 
     try:
-        user_info = await API.get_user_info(target_id)
-        stats_info = await API.get_user_stats(target_id)
-        all_time_since_today = await API.get_all_time_since_today(target_id)
+        user_info_task = API.get_user_info(target_id)
+        stats_info_task = API.get_user_stats(target_id)
+        all_time_since_today_task = API.get_all_time_since_today(target_id)
+
+        user_info, stats_info, all_time_since_today = await asyncio.gather(
+            user_info_task, stats_info_task, all_time_since_today_task
+        )
+
     except InterfaceError:
         await UniMessage.text(
             f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /bind 命令进行绑定"
