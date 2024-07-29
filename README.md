@@ -65,7 +65,8 @@ plugins = ["nonebot_plugin_wakatime"]
 在项目的配置文件中添加下表中的可选配置
 
 > [!note]
-> `client_id` 和 `client_secret` 均从 [WakaTime App](https://wakatime.com/apps) 获取
+> `client_id` 和 `client_secret` 均从 [WakaTime App](https://wakatime.com/apps) 获取  
+> `redirect_uri` 即绑定成功后跳转的页面。需在 [WakaTime App](https://wakatime.com/apps) 配置（只配置一个即可）
 
 |             配置项             | 必填 |              默认值              |
 |:---------------------------:|:--:|:-----------------------------:|
@@ -81,6 +82,9 @@ plugins = ["nonebot_plugin_wakatime"]
 > 请注意你的 `COMMAND_START` 以及上述配置项。
 
 ### 绑定账号
+
+> [!important]
+> 首次绑定时向 Bot 发送 `/wakatime bind`，跟随链接指引进行绑定，成功后会跳转到 `redirect_uri` 处，`code` 会附加在 `redirect_uri` 后面。再次发送 `/wakatime bind <code>` 即可完成绑定。
 
 ```shell
 /wakatime -b|--bind|bind [code]
