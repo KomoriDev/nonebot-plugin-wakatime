@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import Field, BaseModel
 from nonebot.plugin import get_plugin_config
 
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
@@ -22,7 +22,7 @@ class ScopedConfig(BaseModel):
 
 class Config(BaseModel):
 
-    wakatime: ScopedConfig
+    wakatime: ScopedConfig = Field(default_factory=ScopedConfig)
     """Wakatime Plugin Config"""
 
 
