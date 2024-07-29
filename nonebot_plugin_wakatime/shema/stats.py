@@ -1,10 +1,7 @@
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict
+from typing_extensions import TypedDict
 
 
-class Categories(BaseModel):
-    model_config = ConfigDict(extra="allow")
+class Categories(TypedDict):
 
     name: str
     total_seconds: float
@@ -16,8 +13,7 @@ class Categories(BaseModel):
     minutes: int
 
 
-class Project(BaseModel):
-    model_config = ConfigDict(extra="allow")
+class Project(TypedDict):
 
     name: str
     total_seconds: float
@@ -29,9 +25,7 @@ class Project(BaseModel):
     minutes: int
 
 
-class Languages(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
+class Languages(TypedDict):
     name: str
     total_seconds: float
     percent: float
@@ -40,12 +34,10 @@ class Languages(BaseModel):
     text: str
     hours: int
     minutes: int
-    seconds: int | None = None
+    seconds: int | None
 
 
-class Editors(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
+class Editors(TypedDict):
     name: str
     total_seconds: float
     percent: float
@@ -54,47 +46,20 @@ class Editors(BaseModel):
     text: str
     hours: int
     minutes: int
-    seconds: int | None = None
+    seconds: int | None
 
 
-class Stats(BaseModel):
-    model_config = ConfigDict(extra="allow")
+class Stats(TypedDict):
 
-    total_seconds: float
-    total_seconds_including_other_language: float
     human_readable_total: str
     human_readable_total_including_other_language: str
     daily_average: float
     daily_average_including_other_language: float
     human_readable_daily_average: str
     human_readable_daily_average_including_other_language: str
-    categories: list[Categories] | None = None
-    projects: list[Project] | None = None
-    languages: list[Languages] | None = None
-    editors: list[Editors] | None = None
-    operating_systems: list[dict[str, Any]]
-    dependencies: list[dict[str, Any]] | None = None
-    machines: list[dict[str, Any]] | None = None
-    best_day: dict[str, Any] | None = None
-    range: str
-    human_readable_range: str
-    holidays: int
-    days_including_holidays: int
-    days_minus_holidays: int
-    status: str
-    percent_calculated: int
-    is_already_updating: bool
-    is_coding_activity_visible: bool
-    is_other_usage_visible: bool
-    is_stuck: bool
-    is_including_today: bool
-    is_up_to_date: bool
-    start: str | None = None
-    end: str | None = None
-    timezone: str | None = None
-    timeout: int
-    writes_only: bool
+    categories: list[Categories] | None
+    projects: list[Project] | None
+    languages: list[Languages] | None
+    editors: list[Editors] | None
     user_id: str
     username: str
-    created_at: str | None = None
-    modified_at: str | None = None

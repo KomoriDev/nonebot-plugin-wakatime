@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <title>Wakatime User Profile</title>
@@ -49,10 +49,10 @@
   <!-- Profile -->
   <header class="frosted-glass relative w-auto h-32">
     <div class="absolute -top-10 ml-6 w-24 h-24 rounded-full overflow-hidden border-4 border-white">
-      <img src="{{ user.photo }}" alt="Avatar" class="w-full h-full object-cover">
+      <img src="{{ user["photo"] }}" alt="Avatar" class="w-full h-full object-cover">
     </div>
     <div class="flex items-center ml-32 mt-6">
-      <h1 class="text-xl text-white font-semibold">@{{ user.username }}</h1>
+      <h1 class="text-xl text-white font-semibold">@{{ user["username"] }}</h1>
       <div class="ml-3 px-3 py-0.5 text-[#4e4e4e] bg-white rounded-tl-full rounded-tr-full rounded-br-full font-noto">🕹️ Bot of ⭕</div>
     </div>
     <div class="details">
@@ -60,7 +60,7 @@
         <div class="title font-noto">总计编码时间 ⏱</div><div class="result">{{ all_time_since_today }}</div>
       </div>
       <div class="content">
-        <div class="title font-noto">注册时间 📅</div><div class="result">Joined {{ user.created_at }}</div>
+        <div class="title font-noto">注册时间 📅</div><div class="result">Joined {{ user["created_at"] }}</div>
       </div>
     </div>
   </header>
@@ -82,7 +82,7 @@
             {% endfor %}
           </div>
         </div>
-        <span class="text-white">{{ insights['data'].human_readable_total }}</span>
+        <span class="text-white">{{ insights['data']["human_readable_total"] }}</span>
       </div>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -98,7 +98,7 @@
             {% endfor %}
           </div>
         </div>
-      <span class="text-white">{{ insights['data'].human_readable_daily_average }}</span>
+      <span class="text-white">{{ insights['data']["human_readable_daily_average"] }}</span>
       </div>
     </div>
   </section>
@@ -111,12 +111,12 @@
         <div class="frosted-glass relative size-10 mr-2">
           <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <circle cx="18" cy="18" r="8" fill="none" class="stroke-current text-gray-600" stroke-width="2"></circle>
-            <circle cx="18" cy="18" r="8" fill="none" class="stroke-current text-white" stroke-width="2" stroke-dasharray="100" stroke-dashoffset="{{ 100 - editor.percent }}" stroke-linecap="round"></circle>
+            <circle cx="18" cy="18" r="8" fill="none" class="stroke-current text-white" stroke-width="2" stroke-dasharray="100" stroke-dashoffset="{{ 100 - editor["percent"] }}" stroke-linecap="round"></circle>
           </svg>
         </div>
         <div>
-          <div class="text-white text-sm font-thin">{{ editor.name }}</div>
-          <div class="text-white">{{ editor.text }}</div>
+          <div class="text-white text-sm font-thin">{{ editor["name"] }}</div>
+          <div class="text-white">{{ editor["text"] }}</div>
         </div>
       </div>
     {% endfor %}
@@ -129,15 +129,15 @@
       <div class="relative size-28">
         <svg class="rotate-[135deg] size-full" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
           <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="1" stroke-dasharray="75 100" stroke-linecap="round"></circle>
-          <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-green-500" stroke-width="2" stroke-dasharray="{{ language.percent | int }} 100" stroke-linecap="round"></circle>
+          <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-green-500" stroke-width="2" stroke-dasharray="{{ language["percent"] | int }} 100" stroke-linecap="round"></circle>
         </svg>
         <div class="absolute top-1/2 start-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-          {% if language.hours == 0 %}
-            <span class="text-xl font-bold text-green-600">{{ language.minutes }}mins</span>
+          {% if language["hours"] == 0 %}
+            <span class="text-xl font-bold text-green-600">{{ language["minutes"] }}mins</span>
           {% else %}
-            <span class="text-2xl font-bold text-green-600">{{ language.hours }}h</span>
+            <span class="text-2xl font-bold text-green-600">{{ language["hours"] }}h</span>
           {% endif %}
-          <span class="text-green-600 block">{{ language.name }}</span>
+          <span class="text-green-600 block">{{ language["name"] }}</span>
         </div>
       </div>
     {% endfor %}

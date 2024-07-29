@@ -9,8 +9,8 @@ from .utils import image_to_base64, get_lolicon_image, calc_work_time_percentage
 
 async def render(data: WakaTime) -> bytes:
 
-    data.user.created_at = datetime.strptime(
-        data.user.created_at, "%Y-%m-%dT%H:%M:%SZ"
+    data["user"]["created_at"] = datetime.strptime(
+        data["user"]["created_at"], "%Y-%m-%dT%H:%M:%SZ"
     ).strftime("%b %d %Y")
 
     default_background = RESOURCES_DIR / "images" / "background.png"
@@ -26,18 +26,20 @@ async def render(data: WakaTime) -> bytes:
         template_path=str(TEMPLATES_DIR),
         template_name="profile.html",
         templates={
-            "user": data.user,
+            "user": data["user"],
             "background_image": background_image,
             "insights": {
-                "data": data.stats,
-                "last_week": calc_work_time_percentage(data.stats.human_readable_total),
+                "data": data["stats"],
+                "last_week": calc_work_time_percentage(
+                    data["stats"]["human_readable_total"]
+                ),
                 "daily_average": calc_work_time_percentage(
-                    data.stats.human_readable_daily_average, duration="day"
+                    data["stats"]["human_readable_daily_average"], duration="day"
                 ),
             },
-            "editors": data.stats.editors,
-            "languages": data.stats.languages,
-            "all_time_since_today": data.all_time_since_today,
+            "editors": data["stats"]["editors"],
+            "languages": data["stats"]["languages"],
+            "all_time_since_today": data["all_time_since_today"],
         },
         pages={
             "viewport": {"width": 550, "height": 800},
