@@ -28,6 +28,7 @@ __plugin_meta__ = PluginMetadata(
     name="谁是卷王",
     description="将代码统计嵌入 Bot 中",
     usage="/wakatime",
+    type="application",
     config=Config,
     homepage="https://github.com/KomoriDev/nonebot-plugin-wakatime",
     supported_adapters=inherit_supported_adapters("nonebot_plugin_alconna"),
