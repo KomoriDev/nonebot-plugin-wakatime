@@ -39,9 +39,8 @@ NoneBot Wakatime 查询插件。将你的代码统计嵌入 Bot 中
 |:---------------------------:|:--:|:---------------------------:|
 |     wakatime__client_id     | 是  |              无              |
 |   wakatime__client_secret   | 是  |              无              |
-|      wakatime__api_url      | 否  | https://wakatime.com/api/v1 |
+|      wakatime__api_url      | 否  | <https://wakatime.com/api/v1> |
 | wakatime__background_source | 否  |           default           |
-
 
 ## 🎉 使用
 
