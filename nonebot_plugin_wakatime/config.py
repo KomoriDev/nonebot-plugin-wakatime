@@ -10,9 +10,9 @@ TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
 
 class ScopedConfig(BaseModel):
 
-    client_id: str
+    client_id: str = ""
     """Your App ID from https://wakatime.com/apps"""
-    client_secret: str
+    client_secret: str = ""
     """Your App Secret from https://wakatime.com/apps"""
     api_url: str = "https://wakatime.com/api/v1"
     """wakatime api"""

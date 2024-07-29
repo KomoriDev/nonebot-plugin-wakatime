@@ -2,6 +2,7 @@ import asyncio
 from urllib.parse import parse_qs
 
 from nonebot import require
+from nonebot.rule import Rule
 from nonebot.log import logger
 from httpx import ConnectTimeout
 from sqlalchemy.exc import InterfaceError
@@ -18,9 +19,10 @@ from nonebot_plugin_alconna import Args, Match, Option, Alconna, MsgTarget, on_a
 from .apis import API
 from . import migrations
 from .models import User
+from .config import Config
 from .shema import WakaTime
 from .render_pic import render
-from .config import Config, config
+from .config import config as wakatime_config
 
 __plugin_meta__ = PluginMetadata(
     name="谁是卷王",
@@ -37,6 +39,18 @@ __plugin_meta__ = PluginMetadata(
     },
 )
 
+if wakatime_config.client_id == "" or wakatime_config.client_secret == "":
+    logger.warning("未配置 client_id 或 client_secret")
+
+
+def is_enable() -> Rule:
+
+    def _rule() -> bool:
+        return wakatime_config.client_id != "" and wakatime_config.client_secret != ""
+
+    return Rule(_rule)
+
+
 wakatime = on_alconna(
     Alconna(
         "wakatime",
@@ -44,6 +58,7 @@ wakatime = on_alconna(
         Option("-b|--bind|bind", Args["code?", str], help_text="绑定 wakatime"),
     ),
     aliases={"waka"},
+    rule=is_enable(),
     use_cmd_start=True,
 )
 
@@ -101,7 +116,7 @@ async def _(
 
     if not code.available:
         auth_url = (
-            f"https://wakatime.com/oauth/authorize?client_id={config.client_id}&response_type=code"
+            f"https://wakatime.com/oauth/authorize?client_id={wakatime_config.client_id}&response_type=code"
             f"&redirect_uri=https://wakatime.com/dashboard"
         )
 
