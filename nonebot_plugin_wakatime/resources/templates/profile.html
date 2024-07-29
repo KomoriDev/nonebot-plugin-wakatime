@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Wakatime User Profile</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            noto: ['Noto Color Emoji', "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer components {
+
+      .background {
+        @apply bg-[url({{ background_image }})] bg-no-repeat bg-fixed bg-center bg-cover
+      }
+
+      .frosted-glass {
+        @apply bg-white bg-opacity-20 backdrop-blur-sm rounded-lg border border-white border-opacity-30
+      }
+
+      .details {
+        @apply mx-5 my-2
+      }
+      .details .content {
+        @apply flex items-center
+      }
+      .details .title {
+        @apply font-normal text-sm text-white text-opacity-70
+      }
+      .details .result {
+        @apply ml-1 font-medium text-base text-white
+      }
+    }
+  </style>
+</head>
+
+<body class="background px-10 py-20">
+
+  <!-- Profile -->
+  <header class="frosted-glass relative w-auto h-32">
+    <div class="absolute -top-10 ml-6 w-24 h-24 rounded-full overflow-hidden border-4 border-white">
+      <img src="{{ user.photo }}" alt="Avatar" class="w-full h-full object-cover">
+    </div>
+    <div class="flex items-center ml-32 mt-6">
+      <h1 class="text-xl text-white font-semibold">@{{ user.username }}</h1>
+      <div class="ml-3 px-3 py-0.5 text-[#4e4e4e] bg-white rounded-tl-full rounded-tr-full rounded-br-full font-noto">🕹️ Bot of ⭕</div>
+    </div>
+    <div class="details">
+      <div class="content">
+        <div class="title font-noto">总计编码时间 ⏱</div><div class="result">{{ all_time_since_today }}</div>
+      </div>
+      <div class="content">
+        <div class="title font-noto">注册时间 📅</div><div class="result">Joined {{ user.created_at }}</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Insights -->
+  <section class="frosted-glass mt-5 p-5">
+    <div class="grid gap-y-4 grid-cols-1">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-white">Last Week</span>
+            <div class="flex items-center space-x-0.5">
+            {% for i in range(11) %}
+                {% if i < (11 * (insights['last_week'] / 100)) %}
+                    <div class="w-1 h-2.5 rounded-full bg-green-500"></div>
+                {% else %}
+                    <div class="w-1 h-2.5 rounded-full bg-gray-300"></div>
+                {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <span class="text-white">{{ insights['data'].human_readable_total }}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+          <span class="text-white">Daily Average</span>
+          <div class="flex items-center space-x-0.5">
+            {% for i in range(11) %}
+                {% if i < (11 * (insights['daily_average'] / 100)) %}
+                    <div class="w-1 h-2.5 rounded-full bg-green-500"></div>
+                {% else %}
+                    <div class="w-1 h-2.5 rounded-full bg-gray-300"></div>
+                {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      <span class="text-white">{{ insights['data'].human_readable_daily_average }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editors -->
+  <section class="frosted-glass flex justify-between mt-5 p-5">
+
+    {% for editor in editors[:2] %}
+      <div class="flex items-center">
+        <div class="frosted-glass relative size-10 mr-2">
+          <svg class="size-full -rotate-90" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="8" fill="none" class="stroke-current text-gray-600" stroke-width="2"></circle>
+            <circle cx="18" cy="18" r="8" fill="none" class="stroke-current text-white" stroke-width="2" stroke-dasharray="100" stroke-dashoffset="{{ 100 - editor.percent }}" stroke-linecap="round"></circle>
+          </svg>
+        </div>
+        <div>
+          <div class="text-white text-sm font-thin">{{ editor.name }}</div>
+          <div class="text-white">{{ editor.text }}</div>
+        </div>
+      </div>
+    {% endfor %}
+   </section>
+
+  <!-- Languages -->
+  <section class="frosted-glass flex justify-between mt-5 p-5">
+
+    {% for language in languages[:3] %}
+      <div class="relative size-28">
+        <svg class="rotate-[135deg] size-full" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-gray-200" stroke-width="1" stroke-dasharray="75 100" stroke-linecap="round"></circle>
+          <circle cx="18" cy="18" r="16" fill="none" class="stroke-current text-green-500" stroke-width="2" stroke-dasharray="{{ language.percent | int }} 100" stroke-linecap="round"></circle>
+        </svg>
+        <div class="absolute top-1/2 start-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+          {% if language.hours == 0 %}
+            <span class="text-xl font-bold text-green-600">{{ language.minutes }}mins</span>
+          {% else %}
+            <span class="text-2xl font-bold text-green-600">{{ language.hours }}h</span>
+          {% endif %}
+          <span class="text-green-600 block">{{ language.name }}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+  <footer class="mt-5 text-white text-center font-light">Generated by nonebot-plugin-wakatime</footer>
+</body>
