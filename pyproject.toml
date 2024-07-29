@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-wakatime"
-version = "0.1.0"
+version = "0.1.1"
 description = "将代码统计嵌入 Bot 中"
 authors = [
     {name = "KomoriDev", email = "mute231010@gmail.com"},
