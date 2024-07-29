@@ -5,7 +5,6 @@ from nonebot import require
 from nonebot.rule import Rule
 from nonebot.log import logger
 from httpx import ConnectTimeout
-from sqlalchemy.exc import InterfaceError
 from nonebot.internal.adapter import Event
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
@@ -22,6 +21,7 @@ from .models import User
 from .config import Config
 from .shema import WakaTime
 from .render_pic import render
+from .exception import UserUnboundException
 from .config import config as wakatime_config
 
 __plugin_meta__ = PluginMetadata(
@@ -85,8 +85,7 @@ async def _(event: Event, target: Match[At | int]):
         user_info, stats_info, all_time_since_today = await asyncio.gather(
             user_info_task, stats_info_task, all_time_since_today_task
         )
-
-    except InterfaceError:
+    except UserUnboundException:
         await UniMessage.text(
             f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /bind 命令进行绑定"
         ).finish(at_sender=True)

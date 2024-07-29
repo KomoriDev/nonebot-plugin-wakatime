@@ -8,6 +8,7 @@ from nonebot_plugin_orm import get_session
 from ..models import User
 from ..config import config
 from ..shema import Stats, Users
+from ..exception import UserUnboundException
 
 api_url = config.api_url
 TimeScope: TypeAlias = Literal[
@@ -31,7 +32,7 @@ class API:
             user = (await session.execute(stmt)).scalar()
 
             if not user:
-                ...
+                raise UserUnboundException
 
             cls._access_token_cache[user_id] = user.access_token
             return user.access_token
