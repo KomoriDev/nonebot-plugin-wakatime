@@ -14,6 +14,8 @@ class ScopedConfig(BaseModel):
     """Your App ID from https://wakatime.com/apps"""
     client_secret: str = ""
     """Your App Secret from https://wakatime.com/apps"""
+    redirect_uri: str | list[str] = ""
+    """Authorized Redirect URI in https://wakatime.com/apps"""
     api_url: str = "https://wakatime.com/api/v1"
     """wakatime api"""
     background_source: Literal["default", "LoliAPI", "Lolicon"] = "default"

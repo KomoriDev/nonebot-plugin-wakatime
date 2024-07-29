@@ -40,14 +40,18 @@ __plugin_meta__ = PluginMetadata(
     },
 )
 
-if wakatime_config.client_id == "" or wakatime_config.client_secret == "":
-    logger.warning("未配置 client_id 或 client_secret")
+client_id = wakatime_config.client_id
+client_secret = wakatime_config.client_secret
+redirect_uri = wakatime_config.redirect_uri[0]
+
+if client_id == "" or client_secret == "" or redirect_uri == "":
+    logger.warning("缺失必要配置项，已禁用该插件")
 
 
 def is_enable() -> Rule:
 
     def _rule() -> bool:
-        return wakatime_config.client_id != "" and wakatime_config.client_secret != ""
+        return client_id != "" and client_secret != "" and redirect_uri != ""
 
     return Rule(_rule)
 
@@ -116,8 +120,8 @@ async def _(
 
     if not code.available:
         auth_url = (
-            f"https://wakatime.com/oauth/authorize?client_id={wakatime_config.client_id}&response_type=code"
-            f"&redirect_uri=https://wakatime.com/dashboard"
+            f"https://wakatime.com/oauth/authorize?client_id={client_id}&response_type=code"
+            f"&redirect_uri={redirect_uri}"
         )
 
         await (

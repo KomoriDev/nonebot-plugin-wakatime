@@ -67,12 +67,13 @@ plugins = ["nonebot_plugin_wakatime"]
 > [!note]
 > `client_id` 和 `client_secret` 均从 [WakaTime App](https://wakatime.com/apps) 获取
 
-|             配置项             | 必填 |             默认值             |
-|:---------------------------:|:--:|:---------------------------:|
-|     wakatime__client_id     | 是  |              无              |
-|   wakatime__client_secret   | 是  |              无              |
+|             配置项             | 必填 |              默认值              |
+|:---------------------------:|:--:|:-----------------------------:|
+|     wakatime__client_id     | 是  |               无               |
+|   wakatime__client_secret   | 是  |               无               |
+|   wakatime__redirect_uri    | 是  |               无               |
 |      wakatime__api_url      | 否  | <https://wakatime.com/api/v1> |
-| wakatime__background_source | 否  |           default           |
+| wakatime__background_source | 否  |            default            |
 
 ## 🎉 使用
 
