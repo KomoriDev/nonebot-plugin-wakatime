@@ -12,7 +12,7 @@ require("nonebot_plugin_orm")
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_orm import async_scoped_session
-from nonebot_plugin_alconna.uniseg import At, Button, UniMessage
+from nonebot_plugin_alconna.uniseg import At, Button, UniMessage, FallbackStrategy
 from nonebot_plugin_alconna import Args, Match, Option, Alconna, MsgTarget, on_alconna
 
 from .apis import API
@@ -97,7 +97,7 @@ async def _(event: Event, target: Match[At | int]):
         await (
             UniMessage.text("网络超时，再试试叭")
             .keyboard(Button("input", "重试", text="/wakatime"))
-            .finish(at_sender=True)
+            .finish(at_sender=True, fallback=FallbackStrategy.ignore)
         )
 
     result = WakaTime(
