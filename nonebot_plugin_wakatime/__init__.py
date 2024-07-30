@@ -121,7 +121,7 @@ async def _(
     if not code.available:
         auth_url = (
             f"https://wakatime.com/oauth/authorize?client_id={client_id}&response_type=code"
-            f"&redirect_uri={redirect_uri}"
+            f"&redirect_uri={redirect_uri}&scope=read_stats"
         )
 
         await (
