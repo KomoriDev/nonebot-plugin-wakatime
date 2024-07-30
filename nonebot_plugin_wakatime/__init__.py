@@ -36,7 +36,7 @@ __plugin_meta__ = PluginMetadata(
         "unique_name": "WakaTime",
         "orm_version_location": migrations,
         "author": "Komorebi <mute231010@gmail.com>",
-        "version": "0.1.3",
+        "version": "0.1.4",
     },
 )
 
