@@ -71,9 +71,9 @@ wakatime = on_alconna(
 @wakatime.assign("$main")
 async def _(event: Event, target: Match[At | int]):
     if target.available:
-        if isinstance(target, At):
+        if isinstance(target.result, At):
             target_name = "他"
-            target_id = target.target
+            target_id = target.result.target
         else:
             target_name = "他"
             target_id = target.result
