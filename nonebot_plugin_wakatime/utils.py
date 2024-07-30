@@ -1,3 +1,4 @@
+import re
 import base64
 from pathlib import Path
 from typing import Literal
@@ -18,9 +19,34 @@ async def get_lolicon_image() -> str:
     return response.json()["data"][0]["urls"]["original"]
 
 
+def parse_time(work_time: str):
+
+    patterns = {
+        "hrs": r"(\d+)\s*hrs?",
+        "mins": r"(\d+)\s*mins?",
+        "secs": r"(\d+)\s*secs?",
+    }
+
+    hours = minutes = seconds = 0
+
+    for key, pattern in patterns.items():
+        match = re.search(pattern, work_time)
+        if match:
+            if key == "hrs":
+                hours = int(match.group(1))
+            elif key == "mins":
+                minutes = int(match.group(1))
+            elif key == "secs":
+                seconds = int(match.group(1))
+
+    total_seconds = hours * 3600 + minutes * 60 + seconds
+    return total_seconds
+
+
 def calc_work_time_percentage(
     work_time: str, *, duration: Literal["day", "week", "month"] = "week"
 ):
+
     if duration == "day":
         total_minutes = 24 * 60
     elif duration == "week":
@@ -28,11 +54,8 @@ def calc_work_time_percentage(
     else:
         total_minutes = 30 * 24 * 60
 
-    parts = work_time.split()
-    hours = int(parts[0])
-    minutes = int(parts[2])
-
-    total_work_minutes = hours * 60 + minutes
+    total_work_seconds = parse_time(work_time)
+    total_work_minutes = total_work_seconds / 60
 
     percentage = (total_work_minutes / total_minutes) * 100
 
