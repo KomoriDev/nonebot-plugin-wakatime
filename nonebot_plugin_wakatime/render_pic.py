@@ -37,6 +37,7 @@ async def render(data: WakaTime) -> bytes:
                     data["stats"]["human_readable_daily_average"], duration="day"
                 ),
             },
+            "operating_systems": data["stats"]["operating_systems"],
             "editors": data["stats"]["editors"],
             "languages": data["stats"]["languages"],
             "all_time_since_today": data["all_time_since_today"],

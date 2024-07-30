@@ -49,6 +49,17 @@ class Editors(TypedDict):
     seconds: int | None
 
 
+class OperatingSystems(TypedDict):
+    name: str
+    total_seconds: float
+    percent: float
+    digital: str
+    decimal: str
+    text: str
+    hours: int
+    minutes: int
+
+
 class Stats(TypedDict):
 
     human_readable_total: str
@@ -61,5 +72,6 @@ class Stats(TypedDict):
     projects: list[Project] | None
     languages: list[Languages] | None
     editors: list[Editors] | None
+    operating_systems: list[OperatingSystems] | None
     user_id: str
     username: str
