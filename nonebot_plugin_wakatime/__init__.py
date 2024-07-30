@@ -126,8 +126,8 @@ async def _(
 
         await (
             UniMessage.text(f"前往该页面绑定 wakatime 账号：{auth_url}")
-            # .keyboard(Button("link", label="即刻前往", url=auth_url))
-            .finish(at_sender=True)
+            .keyboard(Button("link", label="即刻前往", url=auth_url))
+            .finish(at_sender=True, fallback=FallbackStrategy.ignore)
         )
 
     resp = await API.bind_user(code.result)
