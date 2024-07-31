@@ -5,46 +5,10 @@
   <meta charset="utf-8">
   <title>Wakatime User Profile</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            noto: ['Noto Color Emoji', "sans-serif"],
-          }
-        }
-      }
-    }
-  </script>
-  <style type="text/tailwindcss">
-    @layer components {
-
-      .background {
-        @apply bg-[url({{ background_image }})] bg-no-repeat bg-fixed bg-center bg-cover
-      }
-
-      .frosted-glass {
-        @apply bg-white bg-opacity-20 backdrop-blur-sm rounded-lg border border-white border-opacity-30
-      }
-
-      .details {
-        @apply flex flex-wrap place-content-between mx-5 my-2
-      }
-      .details .content {
-        @apply flex items-center
-      }
-      .details .title {
-        @apply font-normal text-sm text-white text-opacity-70
-      }
-      .details .result {
-        @apply ml-1 font-medium text-base text-white
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./index.css" />
 </head>
 
-<body class="background px-10 py-20">
+<body class="background px-10 py-20" style="background-image: url({{background_image}});">
 
   <!-- Profile -->
   <header class="frosted-glass relative w-auto">
