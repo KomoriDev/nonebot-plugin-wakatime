@@ -557,7 +557,6 @@ video {
 .background {
   --tw-bg-opacity: 0.1;
   background-size: cover;
-  background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -674,6 +673,10 @@ video {
 
 .mt-6 {
   margin-top: 1.5rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
 }
 
 .block {
@@ -908,6 +911,14 @@ video {
 .py-20 {
   padding-top: 5rem;
   padding-bottom: 5rem;
+}
+
+.pt-20 {
+  padding-top: 5rem;
+}
+
+.pb-10 {
+  padding-bottom: 2.5rem;
 }
 
 .text-center {

@@ -43,7 +43,7 @@ async def render(data: WakaTime) -> bytes:
             "all_time_since_today": data["all_time_since_today"],
         },
         pages={
-            "viewport": {"width": 550, "height": 800},
+            "viewport": {"width": 550, "height": 10},
             "base_url": f"file://{TEMPLATES_DIR}",
         },
     )
