@@ -58,6 +58,22 @@ class API:
         return response
 
     @classmethod
+    async def revoke_user_token(cls, user_id: str) -> Response:
+        """Invalidate a secret access token"""
+        access_token = await cls.get_access_token(user_id)
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://wakatime.com/oauth/revoke",
+                data={
+                    "client_id": config.client_id,
+                    "client_secret": config.client_secret,
+                    "token": access_token,
+                },
+            )
+        cls._access_token_cache.pop(user_id)
+        return response
+
+    @classmethod
     async def get_user_info(cls, user_id: str) -> Users:
         """Get user's information"""
         access_token = await cls.get_access_token(user_id)

@@ -90,6 +90,12 @@ plugins = ["nonebot_plugin_wakatime"]
 /wakatime -b|--bind|bind [code]
 ```
 
+### 解绑
+
+```shell
+/wakatime revoke
+```
+
 ### 查询信息
 
 ```shell

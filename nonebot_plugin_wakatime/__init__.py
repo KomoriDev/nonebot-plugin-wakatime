@@ -61,6 +61,7 @@ wakatime = on_alconna(
         "wakatime",
         Args["target?", At | int],
         Option("-b|--bind|bind", Args["code?", str], help_text="绑定 wakatime"),
+        Option("--unbind|unbind|revoke", dest="revoke", help_text="取消绑定"),
     ),
     aliases={"waka"},
     rule=is_enable(),
@@ -145,3 +146,22 @@ async def _(
 
     logger.error(f"用户 {event.get_user_id()} 绑定失败。状态码：{resp.status_code}")
     await UniMessage("绑定失败").finish(at_sender=True)
+
+
+@wakatime.assign("revoke")
+async def _(event: Event, session: async_scoped_session):
+    if not (user := await session.get(User, event.get_user_id())):
+        await (
+            UniMessage.text("还没有绑定 wakatime 账号喔")
+            .keyboard(Button("input", "即刻绑定", text="/wakatime bind"))
+            .finish(at_sender=True, fallback=FallbackStrategy.ignore)
+        )
+
+    resp = await API.revoke_user_token(event.get_user_id())
+    if resp.status_code == 200:
+        await session.delete(user)
+        await session.commit()
+        await UniMessage("已解绑").finish(at_sender=True)
+
+    logger.error(f"用户 {event.get_user_id()} 解绑失败。状态码：{resp.status_code}")
+    await UniMessage("解绑失败").finish(at_sender=True)
