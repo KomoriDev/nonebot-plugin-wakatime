@@ -12,7 +12,7 @@
 _✨ NoneBot Wakatime 查询插件✨_
 
 <a href="">
-  <img src="https://img.shields.io/pypi/v/nonebot-plugin-wakatime.svg" alt="pypi"
+  <img src="https://img.shields.io/pypi/v/nonebot-plugin-wakatime.svg" alt="pypi" />
 </a>
 <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="python">
 <a href="https://pdm.fming.dev">
