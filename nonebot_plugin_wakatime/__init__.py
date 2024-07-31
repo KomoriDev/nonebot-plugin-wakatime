@@ -92,7 +92,7 @@ async def _(event: Event, target: Match[At | int]):
         )
     except UserUnboundException:
         await UniMessage.text(
-            f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /bind 命令进行绑定"
+            f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"  # noqa: E501
         ).finish(at_sender=True)
     except ConnectTimeout:
         await (
@@ -151,11 +151,9 @@ async def _(
 @wakatime.assign("revoke")
 async def _(event: Event, session: async_scoped_session):
     if not (user := await session.get(User, event.get_user_id())):
-        await (
-            UniMessage.text("还没有绑定 wakatime 账号喔")
-            .keyboard(Button("input", "即刻绑定", text="/wakatime bind"))
-            .finish(at_sender=True, fallback=FallbackStrategy.ignore)
-        )
+        await UniMessage.text(
+            "还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"
+        ).finish(at_sender=True)
 
     resp = await API.revoke_user_token(event.get_user_id())
     if resp.status_code == 200:
