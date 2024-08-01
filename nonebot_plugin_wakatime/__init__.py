@@ -11,8 +11,8 @@ require("nonebot_plugin_orm")
 require("nonebot_plugin_user")
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
-from nonebot_plugin_user import UserSession
 from nonebot_plugin_orm import async_scoped_session
+from nonebot_plugin_user import UserSession, get_user
 from nonebot_plugin_alconna.uniseg import At, Button, UniMessage, FallbackStrategy
 from nonebot_plugin_alconna import Args, Match, Option, Alconna, MsgTarget, on_alconna
 
@@ -77,10 +77,11 @@ async def _(user_session: UserSession, target: Match[At | int]):
     if target.available:
         if isinstance(target.result, At):
             target_name = "他"
-            target_id = target.result.target
+            target_platform_id = target.result.target
         else:
             target_name = "他"
-            target_id = target.result
+            target_platform_id = target.result
+        target_id = (await get_user(user_session.platform, target_platform_id)).id
     else:
         target_name = "你"
         target_id = user_session.user_id
