@@ -28,7 +28,7 @@ class API:
 
         session = get_session()
         async with session.begin():
-            stmt = select(User).where(User.id == user_id)
+            stmt = select(User).where(User.user_id == user_id)
             user = (await session.execute(stmt)).scalar()
 
             if not user:

@@ -6,7 +6,9 @@ class User(Model):
 
     __tablename__ = "wakatime"
 
-    id: Mapped[str] = mapped_column(primary_key=True)
+    user_id: Mapped[str] = mapped_column(primary_key=True)
     """User ID"""
+    platform: Mapped[str]
+    """User Account Platform"""
     access_token: Mapped[str]
     """Wakatime Access Token"""

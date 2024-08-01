@@ -5,10 +5,10 @@ from nonebot import require
 from nonebot.rule import Rule
 from nonebot.log import logger
 from httpx import ConnectTimeout
+from nonebot.internal.adapter import Event
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_orm")
-require("nonebot_plugin_user")
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_orm import async_scoped_session
@@ -73,7 +73,7 @@ wakatime = on_alconna(
 
 
 @wakatime.assign("$main")
-async def _(user_session: UserSession, target: Match[At | int]):
+async def _(event: Event, target: Match[At | int]):
     if target.available:
         if isinstance(target.result, At):
             target_name = "他"
@@ -84,7 +84,7 @@ async def _(user_session: UserSession, target: Match[At | int]):
         target_id = (await get_user(user_session.platform, target_platform_id)).id
     else:
         target_name = "你"
-        target_id = user_session.user_id
+        target_id = event.get_user_id()
 
     try:
         user_info_task = API.get_user_info(target_id)
@@ -114,13 +114,10 @@ async def _(user_session: UserSession, target: Match[At | int]):
 
 @wakatime.assign("bind")
 async def _(
-    code: Match[str],
-    user_session: UserSession,
-    msg_target: MsgTarget,
-    session: async_scoped_session,
+    code: Match[str], event: Event, msg_target: MsgTarget, session: async_scoped_session
 ):
 
-    if await session.get(User, user_session.user_id):
+    if await session.get(User, event.get_user_id()):
         await UniMessage("已绑定过 wakatime 账号").finish(at_sender=True)
 
     if not msg_target.private:
@@ -143,29 +140,30 @@ async def _(
     if resp.status_code == 200:
         parsed_data = parse_qs(resp.text)
         user = User(
-            id=user_session.user_id,
+            user_id=event.get_user_id(),
+            platform=msg_target.adapter,
             access_token=parsed_data["access_token"][0],
         )
         session.add(user)
         await session.commit()
         await UniMessage("绑定成功").finish(at_sender=True)
 
-    logger.error(f"用户 {user_session.user_id} 绑定失败。状态码：{resp.status_code}")
+    logger.error(f"用户 {event.get_user_id()} 绑定失败。状态码：{resp.status_code}")
     await UniMessage("绑定失败").finish(at_sender=True)
 
 
 @wakatime.assign("revoke")
-async def _(user_session: UserSession, session: async_scoped_session):
-    if not (user := await session.get(User, user_session.user_id)):
+async def _(event: Event, session: async_scoped_session):
+    if not (user := await session.get(User, event.get_user_id())):
         await UniMessage.text(
             "还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"
         ).finish(at_sender=True)
 
-    resp = await API.revoke_user_token(user_session.user_id)
+    resp = await API.revoke_user_token(event.get_user_id())
     if resp.status_code == 200:
         await session.delete(user)
         await session.commit()
         await UniMessage("已解绑").finish(at_sender=True)
 
-    logger.error(f"用户 {user_session.user_id} 解绑失败。状态码：{resp.status_code}")
+    logger.error(f"用户 {event.get_user_id()} 解绑失败。状态码：{resp.status_code}")
     await UniMessage("解绑失败").finish(at_sender=True)
