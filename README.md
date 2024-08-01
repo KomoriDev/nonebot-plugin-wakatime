@@ -106,7 +106,7 @@ plugins = ["nonebot_plugin_wakatime"]
 
 默认背景图
 
-<img src="./docs/rendering.png" alt="rendering"/>
+<img src="./docs/rendering.png" height="500" alt="rendering"/>
 
 ## 📄 许可证
 
