@@ -102,6 +102,12 @@ plugins = ["nonebot_plugin_wakatime"]
 /wakatime [@]
 ```
 
+## 📸 效果图
+
+默认背景图
+
+<img src="./docs/rendering.png" alt="rendering"/>
+
 ## 📄 许可证
 
 本项目使用 [MIT](./LICENSE) 许可证开源
