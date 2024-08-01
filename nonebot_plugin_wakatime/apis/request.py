@@ -18,17 +18,17 @@ TimeScope: TypeAlias = Literal[
 
 class API:
 
-    _access_token_cache: dict[str, str] = {}
+    _access_token_cache: dict[int, str] = {}
 
     @classmethod
-    async def get_access_token(cls, user_id: str) -> str:
+    async def get_access_token(cls, user_id: int) -> str:
         """Get the access token from database"""
         if user_id in cls._access_token_cache:
             return cls._access_token_cache[user_id]
 
         session = get_session()
         async with session.begin():
-            stmt = select(User).where(User.user_id == user_id)
+            stmt = select(User).where(User.id == user_id)
             user = (await session.execute(stmt)).scalar()
 
             if not user:
@@ -58,7 +58,7 @@ class API:
         return response
 
     @classmethod
-    async def revoke_user_token(cls, user_id: str) -> Response:
+    async def revoke_user_token(cls, user_id: int) -> Response:
         """Invalidate a secret access token"""
         access_token = await cls.get_access_token(user_id)
         async with httpx.AsyncClient() as client:
@@ -74,7 +74,7 @@ class API:
         return response
 
     @classmethod
-    async def get_user_info(cls, user_id: str) -> Users:
+    async def get_user_info(cls, user_id: int) -> Users:
         """Get user's information"""
         access_token = await cls.get_access_token(user_id)
         async with httpx.AsyncClient() as client:
@@ -86,7 +86,7 @@ class API:
 
     @classmethod
     async def get_user_stats(
-        cls, user_id: str, scope: TimeScope = "last_7_days"
+        cls, user_id: int, scope: TimeScope = "last_7_days"
     ) -> Stats:
         """Get user's coding activity.
 
@@ -103,7 +103,7 @@ class API:
         return Stats(**(response.json()["data"]))
 
     @classmethod
-    async def get_all_time_since_today(cls, user_id: str) -> str:
+    async def get_all_time_since_today(cls, user_id: int) -> str:
         """Get the total time logged since account created."""
         assess_token = await cls.get_access_token(user_id)
         async with httpx.AsyncClient() as client:
