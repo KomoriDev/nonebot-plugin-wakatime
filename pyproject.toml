@@ -27,6 +27,7 @@ tests = [
     "pytest>=8.3.2",
     "pytest-asyncio>=0.23.8",
     "pytest-cov>=5.0.0",
+    "nonebug>=0.3.7"
 ]
 extra = [
     "nonebot2[fastapi]>=2.3.2",
@@ -45,6 +46,10 @@ plugins = ["nonebot_plugin_wakatime"]
 
 [tool.pdm]
 distribution = true
+
+[tool.pdm.scripts]
+test = "pytest --cov=nonebot_plugin_wakatime --cov-report xml -n auto"
+test_single = "pytest --cov=nonebot_plugin_wakatime --cov-report xml"
 
 [tool.pdm.dev-dependencies]
 dev = [
@@ -82,3 +87,5 @@ pythonVersion = "3.10"
 pythonPlatform = "All"
 typeCheckingMode = "basic"
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
