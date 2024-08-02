@@ -25,6 +25,7 @@ tests = [
     "viztracer>=0.16.3",
     "pytest>=8.3.2",
     "pytest-asyncio>=0.23.8",
+    "pytest-cov>=5.0.0",
 ]
 extra = [
     "nonebot2[fastapi]>=2.3.2",
