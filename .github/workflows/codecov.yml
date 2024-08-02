@@ -69,7 +69,11 @@ jobs:
         run: pipx run nb-cli orm upgrade
 
       - name: Run tests
-        run: pdm run pytest
+        shell: bash
+        run: |
+          sed -ie "s#sqlite+aiosqlite://#${SQLALCHEMY_DATABASE_URL}#g" tests/conftest.py
+          sed -ie "s#StaticPool#${SQLALCHEMY_POOL_CLASS}#g" tests/conftest.py
+          pdm test_single
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
