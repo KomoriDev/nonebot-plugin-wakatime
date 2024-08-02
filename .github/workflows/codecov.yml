@@ -1,4 +1,4 @@
-name: Database Test
+name: Code Coverage
 
 on:
   push:
@@ -13,11 +13,12 @@ concurrency:
 
 jobs:
   test:
+    name: Test Coverage
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
         db: ["sqlite+aiosqlite://"]
         db-pool: ["StaticPool"]
         include:
@@ -69,3 +70,9 @@ jobs:
 
       - name: Run tests
         run: pytest
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          env_vars: OS,PYTHON_VERSION,SQLALCHEMY_DATABASE_URL,SQLALCHEMY_POOL_CLASS
