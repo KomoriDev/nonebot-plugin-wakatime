@@ -1,0 +1,71 @@
+name: Database Test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        db: ["sqlite+aiosqlite://"]
+        db-pool: ["StaticPool"]
+        include:
+          - os: ubuntu-latest
+            python-version: "3.10"
+            db: postgresql+asyncpg://postgres:postgres@localhost:5432/postgres
+            db-pool: NullPool
+
+          - os: ubuntu-latest
+            python-version: "3.10"
+            db: mysql+aiomysql://mysql:mysql@localhost:3306/mymysql
+            db-pool: NullPool
+      fail-fast: false
+
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON_VERSION: ${{ matrix.python-version }}
+      SQLALCHEMY_DATABASE_URL: ${{ matrix.db }}
+      SQLALCHEMY_POOL_CLASS: ${{ matrix.db-pool }}
+
+    services:
+      postgresql:
+        image: ${{ startsWith(matrix.db, 'postgresql') && 'postgres' || '' }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+
+      mysql:
+        image: ${{ startsWith(matrix.db, 'mysql') && 'mysql' || '' }}
+        env:
+          MYSQL_ROOT_PASSWORD: mysql
+          MYSQL_USER: mysql
+          MYSQL_PASSWORD: mysql
+          MYSQL_DATABASE: mymysql
+        ports:
+          - 3306:3306
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python
+
+      - name: Run migrations
+        run: pipx run nb-cli orm upgrade
+
+      - name: Run tests
+        run: pytest
