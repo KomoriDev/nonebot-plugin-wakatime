@@ -69,7 +69,7 @@ jobs:
         run: pipx run nb-cli orm upgrade
 
       - name: Run tests
-        run: pytest
+        run: pdm run pytest
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
