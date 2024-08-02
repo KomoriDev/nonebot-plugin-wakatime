@@ -5,7 +5,7 @@
 groups = ["default", "adapters", "dev", "extra", "tests"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:61e37d279156e6a14a286c3aa2cc960c9cd2d11c4d11e0b68220c8e516101173"
+content_hash = "sha256:5c11abc8b2f035b9973755b66f17ebc04d70f662c35c4b3ee4df2da168efdd7e"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -329,6 +329,19 @@ marker = "python_version < \"3.11\""
 files = [
     {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
     {file = "exceptiongroup-1.2.2.tar.gz", hash = "sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc"},
+]
+
+[[package]]
+name = "expiringdict"
+version = "1.2.2"
+summary = "Dictionary with auto-expiring values for caching purposes"
+groups = ["default"]
+dependencies = [
+    "typing; python_version < \"3.5\"",
+]
+files = [
+    {file = "expiringdict-1.2.2-py3-none-any.whl", hash = "sha256:09a5d20bc361163e6432a874edd3179676e935eb81b925eccef48d409a8a45e8"},
+    {file = "expiringdict-1.2.2.tar.gz", hash = "sha256:300fb92a7e98f15b05cf9a856c1415b3bc4f2e132be07daa326da6414c23ee09"},
 ]
 
 [[package]]
@@ -966,6 +979,24 @@ dependencies = [
 files = [
     {file = "nonebot_plugin_session-0.3.1-py3-none-any.whl", hash = "sha256:7d21ed11a7d2a3bc9466be11f9653270ff0951585bd8e6fdd8034274e883ffb0"},
     {file = "nonebot_plugin_session-0.3.1.tar.gz", hash = "sha256:ba93b4b8e86394aa06ae099cd17c191e131f0d123a97e0c040578c08614fe306"},
+]
+
+[[package]]
+name = "nonebot-plugin-user"
+version = "0.3.0"
+requires_python = "<4.0,>=3.9"
+summary = "适用于 Nonebot2 的用户插件"
+groups = ["default"]
+dependencies = [
+    "expiringdict<2.0.0,>=1.2.2",
+    "nonebot-plugin-alconna>=0.37.1",
+    "nonebot-plugin-orm>=0.7.0",
+    "nonebot-plugin-session<0.4.0,>=0.3.0",
+    "nonebot2<3.0.0,>=2.2.0",
+]
+files = [
+    {file = "nonebot_plugin_user-0.3.0-py3-none-any.whl", hash = "sha256:3b65884368e446b7b64b46216d060a020100855ecabcbbeb6d10223e55804773"},
+    {file = "nonebot_plugin_user-0.3.0.tar.gz", hash = "sha256:82d7b039d69cd791ebaff1be0308618a850a798219901cee2f5bcd1a96e14911"},
 ]
 
 [[package]]
