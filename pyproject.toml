@@ -23,6 +23,12 @@ adapters = [
 ]
 tests = [
     "viztracer>=0.16.3",
+    "pytest>=8.3.2",
+    "pytest-asyncio>=0.23.8",
+]
+extra = [
+    "nonebot2[fastapi]>=2.3.2",
+    "nonebot-plugin-orm[aiosqlite]>=0.7.5",
 ]
 
 [build-system]
