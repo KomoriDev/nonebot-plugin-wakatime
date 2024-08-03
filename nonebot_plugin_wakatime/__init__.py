@@ -66,6 +66,7 @@ wakatime = on_alconna(
         Option("-b|--bind|bind", Args["code?", str], help_text="绑定 wakatime"),
         Option("--unbind|unbind|revoke", dest="revoke", help_text="取消绑定"),
     ),
+    block=True,
     aliases={"waka"},
     rule=is_enable(),
     use_cmd_start=True,
