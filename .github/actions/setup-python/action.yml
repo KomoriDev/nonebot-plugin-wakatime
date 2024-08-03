@@ -10,10 +10,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install PDM
-      run: pipx install pdm
-      shell: bash
-
     - name: Setup PDM
       uses: pdm-project/setup-pdm@v4
       with:
