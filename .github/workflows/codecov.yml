@@ -18,10 +18,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12"]
         db: ["sqlite+aiosqlite://"]
         db-pool: ["StaticPool"]
         include:
+          - os: ubuntu-latest
+            python-version: "3.10"
+            db: sqlite+aiosqlite://
+            db-pool: StaticPool
+
           - os: ubuntu-latest
             python-version: "3.10"
             db: postgresql+asyncpg://postgres:postgres@localhost:5432/postgres
@@ -31,6 +36,19 @@ jobs:
             python-version: "3.10"
             db: mysql+aiomysql://mysql:mysql@localhost:3306/mymysql
             db-pool: NullPool
+
+          - os: windows-latest
+            python-version: "3.10"
+            db: sqlite+aiosqlite://
+            db-pool: StaticPool
+
+          - os: macos-13
+            python-version: "3.10"
+            arch: x64
+            db: sqlite+aiosqlite://
+            db-pool: StaticPool
+
+
       fail-fast: false
 
     env:
