@@ -76,6 +76,13 @@ plugins = ["nonebot_plugin_wakatime"]
 |      wakatime__api_url      | 否  | <https://wakatime.com/api/v1> |
 | wakatime__background_source | 否  |            default            |
 
+> [!note]
+> `background_source` 为背景图来源，可选值为 `default`, `LoliAPI`, `Lolicon` 或者 `CustomSource` 结构，默认为 `default`
+>
+> `CustomSource` 结构为大括号包裹的，包含 `uri` 字段的字典字符串（即最外层额外使用一层引号包裹）
+> `uri` 为图片资源路径，可填写网络图片链接或者本地图片路径（建议为绝对路径）
+> 例: `'{"uri": "https://example.com/image.jpg"}'`/`'{"uri": "/path/to/image.jpg"}'`
+
 ## 🎉 使用
 
 > [!note]
