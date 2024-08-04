@@ -2,9 +2,9 @@ from pathlib import Path
 from typing import Literal
 
 from nonebot import logger
+from pydantic_core import Url
 from pydantic import Field, BaseModel
 from nonebot.plugin import get_plugin_config
-from pydantic_core import Url
 
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
@@ -17,6 +17,7 @@ class CustomSource(BaseModel):
         if isinstance(self.uri, Path):
             return Url(f"file://{self.uri}")
         return self.uri
+
 
 class ScopedConfig(BaseModel):
 

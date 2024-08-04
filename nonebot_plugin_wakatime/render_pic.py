@@ -3,7 +3,7 @@ from datetime import datetime
 from nonebot_plugin_htmlrender import template_to_pic
 
 from .shema import WakaTime
-from .config import RESOURCES_DIR, TEMPLATES_DIR, config, CustomSource
+from .config import RESOURCES_DIR, TEMPLATES_DIR, CustomSource, config
 from .utils import image_to_base64, get_lolicon_image, calc_work_time_percentage
 
 
@@ -24,7 +24,6 @@ async def render(data: WakaTime) -> bytes:
             background_image = await get_lolicon_image()
         case CustomSource() as cs:
             background_image = cs.to_uri()
-
 
     return await template_to_pic(
         template_path=str(TEMPLATES_DIR),
