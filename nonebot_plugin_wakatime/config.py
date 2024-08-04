@@ -15,7 +15,7 @@ class CustomSource(BaseModel):
 
     def to_uri(self) -> Url:
         if isinstance(self.uri, Path):
-            return Url(f"file://{self.uri}")
+            return Url(self.uri.as_uri())
         return self.uri
 
 
