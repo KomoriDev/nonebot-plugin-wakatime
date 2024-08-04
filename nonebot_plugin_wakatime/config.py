@@ -1,3 +1,4 @@
+import random
 from pathlib import Path
 from typing import Literal
 
@@ -5,6 +6,7 @@ from nonebot import logger
 from pydantic_core import Url
 from pydantic import Field, BaseModel
 from nonebot.plugin import get_plugin_config
+import nonebot_plugin_localstore as localstore
 
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
@@ -15,12 +17,26 @@ class CustomSource(BaseModel):
 
     def to_uri(self) -> Url:
         if isinstance(self.uri, Path):
-            return Url(self.uri.as_uri())
+            if not self.uri.exists():
+                raise FileNotFoundError(f"CustomSource: {self.uri} not exists")
+
+            uri = self.uri
+            if not self.uri.is_absolute():
+                uri = Path(localstore.get_plugin_data_dir() / self.uri)
+
+            if uri.is_dir():
+                # random pick a file
+                files = [f for f in uri.iterdir() if f.is_file()]
+                logger.debug(
+                    f"CustomSource: {uri} is a directory, random pick a file: {files}"
+                )
+                return Url((uri / random.choice(files)).as_uri())
+            return Url(uri.as_uri())
+
         return self.uri
 
 
 class ScopedConfig(BaseModel):
-
     client_id: str = ""
     """Your App ID from https://wakatime.com/apps"""
     client_secret: str = ""
@@ -34,7 +50,6 @@ class ScopedConfig(BaseModel):
 
 
 class Config(BaseModel):
-
     wakatime: ScopedConfig = Field(default_factory=ScopedConfig)
     """Wakatime Plugin Config"""
 

@@ -11,6 +11,7 @@ require("nonebot_plugin_orm")
 require("nonebot_plugin_user")
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
+require("nonebot_plugin_localstore")
 from nonebot_plugin_orm import async_scoped_session
 from nonebot_plugin_user import UserSession, get_user
 from nonebot_plugin_alconna.uniseg import At, Button, UniMessage, FallbackStrategy
