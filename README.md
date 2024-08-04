@@ -76,14 +76,9 @@ plugins = ["nonebot_plugin_wakatime"]
 |      wakatime__api_url      | 否  | <https://wakatime.com/api/v1> |
 | wakatime__background_source | 否  |            default            |
 
-> [!note]
-> `background_source` 为背景图来源，可选值为 `default`, `LoliAPI`, `Lolicon` 或者 `CustomSource` 结构，默认为 `default`
->
-> `CustomSource` 结构为大括号包裹的，包含 `uri` 字段的字典字符串（即最外层额外使用一层引号包裹）
->
-> `uri` 为图片资源路径，可填写网络图片链接或者本地图片路径（建议为绝对路径）
->
-> 例: `'{"uri": "https://example.com/image.jpg"}'`/`'{"uri": "/path/to/image.jpg"}'`
+`wakatime__background_source` 为背景图来源，可选值为字面量`default`/`LoliAPI`/`Lolicon` 或者结构 `CustomSource` ，默认为 `default`。
+
+可参见[自定义背景图](#自定义背景图)
 
 ## 🎉 使用
 
@@ -116,6 +111,21 @@ plugins = ["nonebot_plugin_wakatime"]
 默认背景图
 
 <img src="./docs/rendering.png" height="500" alt="rendering"/>
+
+### 自定义背景图
+
+在配置文件中设置 `wakatime__background_source` 为 `CustomSource`结构的字典
+  
+  ```env
+  wakatime__background_source = '{"url": "https://example.com/image.jpg"}'
+  ```
+
+其中
+- `url` 可为网络图片 API，只要返回的是图片即可
+- `url` 也可以为 base64 编码的图片，如 `data:image/png;base64,xxxxxx` ~（一般也没人这么干）~
+- `url` 也可以为本地图片路径，如 `imgs/image.jpg`、`/path/to/image.jpg`
+- 如果本地图片路径是相对路径，会使用 [`nonebot-plugin-localstore`](https://github.com/nonebot/plugin-localstore) 指定的 data 目录作为根目录
+- 如果本地图片路径是目录，会随机选择目录下的一张图片作为背景图
 
 ## 📄 许可证
 
