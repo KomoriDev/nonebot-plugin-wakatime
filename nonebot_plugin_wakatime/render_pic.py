@@ -3,7 +3,7 @@ from datetime import datetime
 from nonebot_plugin_htmlrender import template_to_pic
 
 from .shema import WakaTime
-from .config import RESOURCES_DIR, TEMPLATES_DIR, config
+from .config import RESOURCES_DIR, TEMPLATES_DIR, config, CustomSource
 from .utils import image_to_base64, get_lolicon_image, calc_work_time_percentage
 
 
@@ -15,12 +15,16 @@ async def render(data: WakaTime) -> bytes:
 
     default_background = RESOURCES_DIR / "images" / "background.png"
 
-    if config.background_source == "default":
-        background_image = image_to_base64(default_background)
-    elif config.background_source == "LoliAPI":
-        background_image = "https://www.loliapi.com/acg/pe/"
-    else:
-        background_image = await get_lolicon_image()
+    match config.background_source:
+        case "default":
+            background_image = image_to_base64(default_background)
+        case "LoliAPI":
+            background_image = "https://www.loliapi.com/acg/pe/"
+        case "Lolicon":
+            background_image = await get_lolicon_image()
+        case CustomSource() as cs:
+            background_image = cs.to_uri()
+
 
     return await template_to_pic(
         template_path=str(TEMPLATES_DIR),

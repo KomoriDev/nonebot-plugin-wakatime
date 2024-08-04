@@ -1,12 +1,22 @@
 from pathlib import Path
 from typing import Literal
 
+from nonebot import logger
 from pydantic import Field, BaseModel
 from nonebot.plugin import get_plugin_config
+from pydantic_core import Url
 
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
 
+
+class CustomSource(BaseModel):
+    uri: Url | Path
+
+    def to_uri(self) -> Url:
+        if isinstance(self.uri, Path):
+            return Url(f"file://{self.uri}")
+        return self.uri
 
 class ScopedConfig(BaseModel):
 
@@ -18,7 +28,7 @@ class ScopedConfig(BaseModel):
     """Authorized Redirect URI in https://wakatime.com/apps"""
     api_url: str = "https://wakatime.com/api/v1"
     """wakatime api"""
-    background_source: Literal["default", "LoliAPI", "Lolicon"] = "default"
+    background_source: Literal["default", "LoliAPI", "Lolicon"] | CustomSource = "default"
     """Background Source"""
 
 
@@ -29,3 +39,4 @@ class Config(BaseModel):
 
 
 config = get_plugin_config(Config).wakatime
+logger.debug(f"load plugin config: {config}")
