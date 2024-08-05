@@ -24,7 +24,7 @@ client_id = wakatime_config.client_id
 client_secret = wakatime_config.client_secret
 redirect_uri = wakatime_config.redirect_uri
 
-if client_id == "" or client_secret == "" or redirect_uri == "":
+if not client_id or not client_secret or not redirect_uri:
     plugin_enable = False
     logger.error("缺失必要配置项，已禁用该插件")
 

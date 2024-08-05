@@ -7,13 +7,14 @@ from nonebot.plugin import get_plugin_config
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
 
-
 class ScopedConfig(BaseModel):
 
     client_id: str = ""
     """Your App ID from https://wakatime.com/apps"""
     client_secret: str = ""
     """Your App Secret from https://wakatime.com/apps"""
+    register_route: str = "/wakatime/register"
+    """Register Route"""
     redirect_uri: str = ""
     """Authorized Redirect URI in https://wakatime.com/apps"""
     api_url: str = "https://wakatime.com/api/v1"
