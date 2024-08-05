@@ -12,6 +12,7 @@ dependencies = [
     "nonebot-plugin-session>=0.3.1",
     "nonebot-plugin-htmlrender>=0.3.3",
     "nonebot-plugin-user>=0.3.0",
+    "expiringdictx>=1.0.1",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
