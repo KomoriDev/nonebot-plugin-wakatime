@@ -18,6 +18,7 @@ TimeScope: TypeAlias = Literal[
     "last_7_days", "last_30_days", "last_6_months", "last_year", "all_time"
 ]
 
+
 class API:
     _access_token_cache: dict[int, str] = {}
 
