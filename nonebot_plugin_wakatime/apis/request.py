@@ -1,16 +1,15 @@
+import json
 from functools import partial
+from urllib.parse import parse_qs
 from typing import Literal, TypeAlias, cast
 
-import json
-from urllib.parse import parse_qs
-
-from nonebot.drivers import Request, Response
 from sqlalchemy import select
 from nonebot_plugin_orm import get_session
+from nonebot.drivers import Request, Response
 
-from ..boostrap import driver
 from ..models import User
 from ..config import config
+from ..boostrap import driver
 from ..shema import Stats, Users
 from ..exception import UserUnboundException
 
@@ -19,8 +18,10 @@ TimeScope: TypeAlias = Literal[
     "last_7_days", "last_30_days", "last_6_months", "last_year", "all_time"
 ]
 
+
 class BindUserException(Exception):
     pass
+
 
 class API:
     _access_token_cache: dict[int, str] = {}

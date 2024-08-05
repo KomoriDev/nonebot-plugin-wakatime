@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, cast
-from nonebot import get_driver as get_nonebot_driver, logger
+
+from nonebot import logger
+from nonebot import get_driver as get_nonebot_driver
 from nonebot.drivers import ASGIMixin, HTTPClientMixin
 
 from .config import config as wakatime_config
@@ -30,6 +32,7 @@ if not client_id or not client_secret or not redirect_uri:
 
 
 if TYPE_CHECKING:
+
     class Driver(HTTPClientMixin, ASGIMixin): ...
 
     driver = cast(Driver, driver)

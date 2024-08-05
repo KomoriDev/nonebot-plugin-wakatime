@@ -7,6 +7,7 @@ from nonebot.plugin import get_plugin_config
 RESOURCES_DIR: Path = Path(__file__).parent / "resources"
 TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
 
+
 class ScopedConfig(BaseModel):
 
     client_id: str = ""
