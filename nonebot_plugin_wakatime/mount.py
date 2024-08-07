@@ -9,7 +9,7 @@ from nonebot.drivers import URL, Request, Response, HTTPServerSetup
 
 from .apis import API
 from .config import config
-from .boostrap import driver, mountable
+from .bootstrap import driver, mountable
 from .render_pic import render_bind_result
 
 State = NewType("State", str)

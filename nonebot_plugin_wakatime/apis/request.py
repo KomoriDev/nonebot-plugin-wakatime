@@ -9,7 +9,7 @@ from nonebot.drivers import Request, Response
 
 from ..models import User
 from ..config import config
-from ..boostrap import driver
+from ..bootstrap import driver
 from ..shema import Stats, Users
 from ..exception import BindUserException, UserUnboundException
 
