@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from nonebot_plugin_htmlrender import template_to_pic
+from nonebot_plugin_htmlrender import template_to_pic, template_to_html
 
 from .shema import WakaTime
 from .config import RESOURCES_DIR, TEMPLATES_DIR, config
@@ -46,4 +46,16 @@ async def render(data: WakaTime) -> bytes:
             "viewport": {"width": 550, "height": 10},
             "base_url": f"file://{TEMPLATES_DIR}",
         },
+    )
+
+
+async def render_bind_result(status_code: int, content: str) -> str:
+
+    result = "success" if status_code == 200 else "error"
+
+    return await template_to_html(
+        template_path=str(TEMPLATES_DIR),
+        template_name=f"{result}.html.jinja2",
+        status_code=status_code,
+        content=content,
     )
