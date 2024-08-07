@@ -10,6 +10,7 @@ from nonebot.drivers import URL, Request, Response, HTTPServerSetup
 from .apis import API
 from .config import config
 from .boostrap import driver, mountable
+from .render_pic import render_bind_result
 
 State = NewType("State", str)
 
@@ -29,11 +30,15 @@ async def register_code_handler(req: Request):
     logger.debug(f"code: {code}, state: {state}")
 
     if code is None or state is None:
-        return Response(400, content="Bad Request")  # TODO: 好康的页面？
+        return Response(400, content=await render_bind_result(400, "Bad Request."))
 
     record = waiting_codes.get(State(state))
     if record is None:
-        return Response(404, content="User Not Found or Expired")
+        return Response(
+            404,
+            headers={"Content-Type": "text/html"},
+            content=await render_bind_result(404, "User Not Found or Expired."),
+        )
 
     user_without_id = await API.bind_user(code)
 
@@ -44,7 +49,7 @@ async def register_code_handler(req: Request):
 
     await record.target.send("绑定成功！")
 
-    return Response(200, content="Bind OK")
+    return Response(200, content=await render_bind_result(200, "Bind OK."))
 
 
 if mountable:
