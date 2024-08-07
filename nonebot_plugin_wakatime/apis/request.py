@@ -66,7 +66,7 @@ class API:
                     },
                 )
             )
-        if resp.status_code != 200:
+        if resp.status_code == 200:
             if not isinstance(resp.content, str):
                 resp.content = cast(bytes, resp.content or b"").decode()
             parsed_data = parse_qs(resp.content)
