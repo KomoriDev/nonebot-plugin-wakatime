@@ -5,7 +5,7 @@
 groups = ["default", "adapters", "dev", "extra", "tests"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:e18e0c217536ec50f3a24f0dcacfd0260d8a2332326d8d2cceb6fdbd9bd2d0f6"
+content_hash = "sha256:6dec10383aaa3fb9da540d4358575d5bb27e7bf3d03266b58172f6541192b76b"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1938,6 +1938,20 @@ dependencies = [
 files = [
     {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
     {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
+]
+
+[[package]]
+name = "respx"
+version = "0.21.1"
+requires_python = ">=3.7"
+summary = "A utility for mocking out the Python HTTPX and HTTP Core libraries."
+groups = ["tests"]
+dependencies = [
+    "httpx>=0.21.0",
+]
+files = [
+    {file = "respx-0.21.1-py2.py3-none-any.whl", hash = "sha256:05f45de23f0c785862a2c92a3e173916e8ca88e4caad715dd5f68584d6053c20"},
+    {file = "respx-0.21.1.tar.gz", hash = "sha256:0bd7fe21bfaa52106caa1223ce61224cf30786985f17c63c5d71eff0307ee8af"},
 ]
 
 [[package]]

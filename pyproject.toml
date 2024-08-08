@@ -34,6 +34,7 @@ tests = [
     "nb-cli>=1.4.1",
     "cryptography>=43.0.0",
     "pytest-mock>=3.14.0",
+    "respx>=0.21.1",
 ]
 extra = [
     "nonebot2[fastapi]>=2.3.2",
