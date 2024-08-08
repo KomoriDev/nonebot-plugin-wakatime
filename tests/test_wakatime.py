@@ -1,3 +1,5 @@
+from io import BytesIO
+
 from yarl import URL
 from nonebug import App
 from nonebot import get_adapter
@@ -8,6 +10,11 @@ from nonebot.adapters.onebot.v11 import Message as OneBotV11Message
 from nonebot.adapters.onebot.v11 import MessageSegment as OneBotV11MS
 
 from .utils import fake_v11_group_message_event, fake_v11_private_message_event
+
+FAKE_IMAGE = BytesIO(
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00"
+    b"\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\r\xefF\xb8\x00\x00\x00\x00IEND\xaeB`\x82"
+)
 
 
 async def test_bind_wakatime_group(app: App):
@@ -53,7 +60,6 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
         event = fake_v11_private_message_event(message=OneBotV11Message("/waka bind"))
 
         ctx.receive_event(bot, event)
-
         ctx.should_call_send(
             event,
             OneBotV11Message(
@@ -62,3 +68,80 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
             result=True,
         ),
         ctx.should_finished()
+
+
+async def test_get_wakatime_info_without_binding(app: App, mocker: MockerFixture):
+    from nonebot_plugin_wakatime import wakatime
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(message=OneBotV11Message("/waka"))
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11Message(
+                OneBotV11MS.at("2310")
+                + "你还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"
+            ),
+            result=True,
+        ),
+        ctx.should_finished()
+
+
+async def test_get_wakatime_info(app: App, mocker: MockerFixture):
+
+    from nonebot_plugin_wakatime import wakatime
+    from nonebot_plugin_wakatime.shema import Stats, Users
+
+    user = Users(
+        id="48e5e537-efb7-4304-8562-132953542107",
+        photo="https://wakatime.com/photo/48e5e537-efb7-4304-8562-132953542107",
+        last_project="nonebot-plugin-wakatime",
+        username="Komorebi",
+        created_at="2023-02-02T07:24:13Z",
+    )
+    stats = Stats(
+        human_readable_total="22 hrs 36 mins",
+        human_readable_total_including_other_language="61 hrs 31 mins",
+        daily_average=11627.0,
+        daily_average_including_other_language=31644.0,
+        human_readable_daily_average="3 hrs 13 mins",
+        human_readable_daily_average_including_other_language="8 hrs 47 mins",
+        user_id="48e5e537-efb7-4304-8562-132953542107",
+        username="Komorebi",
+    )
+
+    mocked_user_info = mocker.patch(
+        "nonebot_plugin_wakatime.API.get_user_info",
+        return_value=user,
+    )
+    mocked_user_stats = mocker.patch(
+        "nonebot_plugin_wakatime.API.get_user_stats",
+        return_value=stats,
+    )
+    mocked_all_time_since_today = mocker.patch(
+        "nonebot_plugin_wakatime.API.get_all_time_since_today",
+        return_value="854 hrs 57 mins",
+    )
+    mocked_wakatime_info_image = mocker.patch(
+        "nonebot_plugin_wakatime.render",
+        return_value=FAKE_IMAGE,
+    )
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(message=OneBotV11Message("/waka"))
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11Message(OneBotV11MS.at("2310") + OneBotV11MS.image(file=FAKE_IMAGE)),
+            result=True,
+        ),
+        ctx.should_finished()
+
+    mocked_user_info.assert_called_once()
+    mocked_user_stats.assert_called_once()
+    mocked_all_time_since_today.assert_called_once()
+    mocked_wakatime_info_image.assert_called_once()
