@@ -33,6 +33,7 @@ tests = [
     "aiomysql>=0.2.0",
     "nb-cli>=1.4.1",
     "cryptography>=43.0.0",
+    "pytest-mock>=3.14.0",
 ]
 extra = [
     "nonebot2[fastapi]>=2.3.2",
