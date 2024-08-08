@@ -34,6 +34,7 @@ async def test_bind_wakatime_group(app: App):
 
 async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
     from nonebot_plugin_wakatime import wakatime
+    from nonebot_plugin_wakatime.bootstrap import mountable
 
     mocker.patch("os.urandom", return_value=b"0" * 40)
 
@@ -63,7 +64,15 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
         ctx.should_call_send(
             event,
             OneBotV11Message(
-                OneBotV11MS.at("2310") + f"前往该页面绑定 wakatime 账号：{auth_url}" + ""
+                [
+                    OneBotV11MS.at("2310"),
+                    OneBotV11MS.text(f"前往该页面绑定 wakatime 账号：{auth_url}"),
+                    OneBotV11MS.text(
+                        "\n请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
+                        if not mountable
+                        else ""
+                    ),
+                ]
             ),
             result=True,
         )
@@ -90,7 +99,6 @@ async def test_get_wakatime_info_without_binding(app: App, mocker: MockerFixture
 
 
 async def test_get_wakatime_info(app: App, mocker: MockerFixture):
-
     from nonebot_plugin_wakatime import wakatime
     from nonebot_plugin_wakatime.shema import Stats, Users
 

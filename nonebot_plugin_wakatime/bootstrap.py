@@ -33,7 +33,8 @@ elif not isinstance(driver, ASGIMixin):
         "无法挂载自动注册 wakatime code 的路由，需要手动绑定"
     )
 
-elif not redirect_uri or not (
+# 当 redirect_uri 未设置或是 wakatime.com 域名时，无法挂载自动注册 wakatime code 的路由
+elif not redirect_uri or (
     (host := URL(redirect_uri).host) and (host.endswith("wakatime.com"))
 ):
     mountable = False
