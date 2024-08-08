@@ -66,7 +66,7 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
                 OneBotV11MS.at("2310") + f"前往该页面绑定 wakatime 账号：{auth_url}" + ""
             ),
             result=True,
-        ),
+        )
         ctx.should_finished()
 
 
@@ -85,7 +85,7 @@ async def test_get_wakatime_info_without_binding(app: App, mocker: MockerFixture
                 + "你还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"
             ),
             result=True,
-        ),
+        )
         ctx.should_finished()
 
 
@@ -108,6 +108,11 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
         daily_average_including_other_language=31644.0,
         human_readable_daily_average="3 hrs 13 mins",
         human_readable_daily_average_including_other_language="8 hrs 47 mins",
+        categories=None,
+        projects=None,
+        languages=None,
+        editors=None,
+        operating_systems=None,
         user_id="48e5e537-efb7-4304-8562-132953542107",
         username="Komorebi",
     )
@@ -138,7 +143,7 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
             event,
             OneBotV11Message(OneBotV11MS.at("2310") + OneBotV11MS.image(file=FAKE_IMAGE)),
             result=True,
-        ),
+        )
         ctx.should_finished()
 
     mocked_user_info.assert_called_once()
