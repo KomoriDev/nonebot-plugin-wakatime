@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, cast
 
 from yarl import URL
-
 from nonebot import logger
 from nonebot import get_driver as get_nonebot_driver
 from nonebot.drivers import ASGIMixin, HTTPClientMixin

@@ -1,6 +1,6 @@
-import respx
-import httpx
 import yarl
+import httpx
+import respx
 
 
 @respx.mock
