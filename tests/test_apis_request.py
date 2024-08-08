@@ -2,9 +2,10 @@ import yarl
 import httpx
 import respx
 
+from nonebug import App
 
 @respx.mock
-async def test_user_bind():
+async def test_user_bind(app: App):
     from nonebot_plugin_wakatime.apis import API
 
     api_route = respx.post("https://wakatime.com/oauth/token").mock(
