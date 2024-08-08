@@ -1,8 +1,8 @@
 import yarl
 import httpx
 import respx
-
 from nonebug import App
+
 
 @respx.mock
 async def test_user_bind(app: App):
