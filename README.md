@@ -62,26 +62,11 @@ plugins = ["nonebot_plugin_wakatime"]
 
 ## ⚙️ 配置
 
-### 驱动器配置
-
-Wakatime 插件需要项目支持客户端型驱动器，因此需要在配置文件中添加相关配置项。具体的配置方法可以参考[配置驱动器](https://nonebot.dev/docs/advanced/driver#配置驱动器)。
-
-同时，如果项目还支持服务端型驱动器，则插件还可以通过配置项来自动注册用户。具体的配置方法可以参考[启用自动注册](#启用自动注册)。
-
-下面是一个同时支持客户端/服务端型驱动器的配置示例：
-
-```env
-DRIVER=~fastapi+~httpx
-```
-
-### 插件配置
-
-在项目的配置文件中添加下表中的可选配置
+在项目的配置文件中添加下表中配置
 
 > [!note]
 > `client_id` 和 `client_secret` 均从 [WakaTime App](https://wakatime.com/apps) 获取  
-> `redirect_uri` 即绑定成功后跳转的页面。需先在 [WakaTime App](https://wakatime.com/apps) 配置才能使用（只配置一个即可）  
-> 可使用`https://wakatime.com/oauth/test`或者参考 [启用自动注册](#启用自动注册)
+> `redirect_uri` 的配置参见 [此处](#redirect_uri)
 
 |            配置项             | 必填 |            默认值             |
 | :---------------------------: | :--: | :---------------------------: |
@@ -92,46 +77,60 @@ DRIVER=~fastapi+~httpx
 |  wakatime\_\_register_route   |  否  |      /wakatime/register       |
 | wakatime\_\_background_source |  否  |            default            |
 
-### 启用自动注册
+### redirect_uri
 
-如果 Nonebot driver 支持服务端型驱动器，可以通过以下配置项启用自动注册
+> [!NOTE]
+>
+> `redirect_uri` 指绑定后跳转的页面，可以使用 `https://wakatime.com/oauth/test` 和个人域名
 
-- 假设 bot 所在服务器的域名为 `example.com`
-- 假设 bot 的端口为 `8080`，并且已经开放
-- 假设`wakatime__register_route` 为 `/wakatime/register`
+#### 使用 WakaTime 域名
 
-则你可以在 `WakaTime App` 的 `redirect_uri` 中填写
+- 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://wakatime.com/oauth/test`
+- 在项目配置文件中写入：`wakatime__redirect_uri = https://wakatime.com/oauth/test`
 
-```text
-http://example.com:8080/wakatime/register
-```
+#### 使用个人域名
 
-然后在配置文件中添加以下配置项
+> [!TIP]
+>
+> 使用个人域名可以启用自动注册，即发送绑定指令后无需进行二次操作，用于简化绑定流程。
+
+- 使用 nb-cli 安装客户端类型驱动器：`nb driver install httpx`
+- 在项目配置文件中写入：`driver=~fastapi+~httpx`
+- 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://<your-domain>/wakatime/register`
+- 在项目配置文件中写入：`wakatime__redirect_uri = https://<your-domain>/wakatime/register`
+
+### background_source
+
+`wakatime__background_source` 为背景图来源，可选值为字面量 `default` / `LoliAPI` / `Lolicon` 或者结构 `CustomSource` 。`LoliAPI` 和  `Lolicon` 均为随机背景图，`CustomSource` 用于自定义背景图。 默认为 `default`。
+
+以下是 `CustomSource` 用法
+
+在配置文件中设置 `wakatime__background_source` 为 `CustomSource`结构的字典
 
 ```env
-wakatime__redirect_uri = https://example.com:8080/wakatime/register
+wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
 ```
 
-> [!note]
-> 如果域名支持 HTTPS，将 `http` 替换为 `https`  
-> 如果你想直接使用服务器的 IP 地址（不推荐），可以将 `example.com` 替换为服务器的 IP 地址，并确保其为公网 IP
+其中
 
-`wakatime__background_source` 为背景图来源，可选值为字面量`default`/`LoliAPI`/`Lolicon` 或者结构 `CustomSource` ，默认为 `default`。
-
-可参见[自定义背景图](#自定义背景图)
+- `uri` 可为网络图片 API，只要返回的是图片即可
+- `uri` 也可以为 base64 编码的图片，如 `data:image/png;base64,xxxxxx` ~~（一般也没人这么干）~~
+- `uri` 也可以为本地图片路径，如 `imgs/image.jpg`、`/path/to/image.jpg`
+  - 如果本地图片路径是相对路径，会使用 [`nonebot-plugin-localstore`](https://github.com/nonebot/plugin-localstore) 指定的 data 目录作为根目录
+  - 如果本地图片路径是目录，会随机选择目录下的一张图片作为背景图
 
 ## 🎉 使用
 
 > [!note]
-> 假设你的命令前缀为 `/`  
-> 请检查你的 `COMMAND_START` 以及上述配置项。
+> 请检查你的 `COMMAND_START` 以及上述配置项。这里默认使用 `/`
 
 ### 绑定账号
 
-首次绑定时向 Bot 发送 `/wakatime bind`，跟随链接指引进行绑定，成功后会跳转到 `redirect_uri` 处
+首次绑定时向 Bot 发送 `/wakatime bind`，跟随链接指引进行绑定，成功后会跳转到 `redirect_uri` 处。
 
-- 如果已经[启用自动注册](#启用自动注册)，则无需继续操作，bot 会自动在你访问绑定链接后注册用户并发送绑定成功消息
-- 如果未启用自动注册，则需要手动绑定，复制访问后链接或者绑定页面中的 code 参数，发送 `/wakatime bind [code]` 绑定
+```shell
+/wakatime bind [code]
+```
 
 ### 解绑
 
@@ -150,22 +149,6 @@ wakatime__redirect_uri = https://example.com:8080/wakatime/register
 默认背景图
 
 <img src="./docs/rendering.png" height="500" alt="rendering"/>
-
-### 自定义背景图
-
-在配置文件中设置 `wakatime__background_source` 为 `CustomSource`结构的字典
-  
-  ```env
-  wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
-  ```
-
-其中
-
-- `uri` 可为网络图片 API，只要返回的是图片即可
-- `uri` 也可以为 base64 编码的图片，如 `data:image/png;base64,xxxxxx` ~（一般也没人这么干）~
-- `uri` 也可以为本地图片路径，如 `imgs/image.jpg`、`/path/to/image.jpg`
-- 如果本地图片路径是相对路径，会使用 [`nonebot-plugin-localstore`](https://github.com/nonebot/plugin-localstore) 指定的 data 目录作为根目录
-- 如果本地图片路径是目录，会随机选择目录下的一张图片作为背景图
 
 ## 📄 许可证
 
