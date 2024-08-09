@@ -17,12 +17,9 @@ class CustomSource(BaseModel):
 
     def to_uri(self) -> Url:
         if isinstance(self.uri, Path):
-            if not self.uri.exists():
-                raise FileNotFoundError(f"CustomSource: {self.uri} not exists")
-
             uri = self.uri
-            if not self.uri.is_absolute():
-                uri = Path(localstore.get_plugin_data_dir() / self.uri)
+            if not uri.is_absolute():
+                uri = Path(localstore.get_plugin_data_dir() / uri)
 
             if uri.is_dir():
                 # random pick a file
@@ -31,6 +28,10 @@ class CustomSource(BaseModel):
                     f"CustomSource: {uri} is a directory, random pick a file: {files}"
                 )
                 return Url((uri / random.choice(files)).as_uri())
+
+            if not uri.exists():
+                raise FileNotFoundError(f"CustomSource: {uri} not exists")
+
             return Url(uri.as_uri())
 
         return self.uri
