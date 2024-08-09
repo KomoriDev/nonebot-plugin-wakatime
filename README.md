@@ -158,6 +158,31 @@ wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
 
 <img src="./docs/rendering.png" height="500" alt="rendering"/>
 
+## 💖 鸣谢
+
+- [`nonebot-plugin-wordcloud`](https://github.com/he0119/nonebot-plugin-wordcloud)：适用于 NoneBot2 的词云插件
+
+### 贡献者们
+
+<!-- prettier-ignore-start -->
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/github/contributors/KomoriDev/nonebot-plugin-wakatime?color=ee8449&style=flat-square)](#贡献者们)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<!-- prettier-ignore-end -->
+
+感谢这些大佬对本项目作出的贡献:
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+_本段符合 [all-contributors](https://allcontributors.org/) 规范_
+
 ## 📄 许可证
 
 本项目使用 [MIT](./LICENSE) 许可证开源
