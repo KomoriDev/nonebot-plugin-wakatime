@@ -23,7 +23,7 @@ from .apis import API
 from . import migrations
 from .models import User
 from .config import Config
-from .shema import WakaTime
+from .schema import WakaTime
 from .render_pic import render
 from .mount import State, WaitingRecord, waiting_codes
 from .exception import BindUserException, UserUnboundException

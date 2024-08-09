@@ -10,7 +10,7 @@ from nonebot.drivers import Request, Response
 from ..models import User
 from ..config import config
 from ..bootstrap import driver
-from ..shema import Stats, Users
+from ..schema import Stats, Users
 from ..exception import BindUserException, UserUnboundException
 
 api_url = config.api_url

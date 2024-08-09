@@ -100,7 +100,7 @@ async def test_get_wakatime_info_without_binding(app: App, mocker: MockerFixture
 
 async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     from nonebot_plugin_wakatime import wakatime
-    from nonebot_plugin_wakatime.shema import Stats, Users
+    from nonebot_plugin_wakatime.schema import Stats, Users
 
     user = Users(
         id="48e5e537-efb7-4304-8562-132953542107",
