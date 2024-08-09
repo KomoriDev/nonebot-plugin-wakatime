@@ -14,6 +14,8 @@ class ScopedConfig(BaseModel):
     """Your App ID from https://wakatime.com/apps"""
     client_secret: str = ""
     """Your App Secret from https://wakatime.com/apps"""
+    register_route: str = "/wakatime/register"
+    """Register Route"""
     redirect_uri: str = ""
     """Authorized Redirect URI in https://wakatime.com/apps"""
     api_url: str = "https://wakatime.com/api/v1"
