@@ -5,7 +5,7 @@
 groups = ["default", "adapters", "dev", "extra", "tests"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:0b8bb0cb80080816fb2d7882a24382a17f30e27a0d1121b0a75556c4779b0c02"
+content_hash = "sha256:d46ead06b11fa35fd2322a7fb051b8ffcd0b9ab127c35f10f9d0a8a7e88a5aed"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -86,7 +86,7 @@ name = "anyio"
 version = "4.4.0"
 requires_python = ">=3.8"
 summary = "High level compatibility layer for multiple asynchronous event loop implementations"
-groups = ["adapters", "extra", "tests"]
+groups = ["default", "adapters", "extra", "tests"]
 dependencies = [
     "exceptiongroup>=1.0.2; python_version < \"3.11\"",
     "idna>=2.8",
@@ -284,7 +284,7 @@ name = "certifi"
 version = "2024.7.4"
 requires_python = ">=3.6"
 summary = "Python package for providing Mozilla's CA Bundle."
-groups = ["extra", "tests"]
+groups = ["default", "extra", "tests"]
 files = [
     {file = "certifi-2024.7.4-py3-none-any.whl", hash = "sha256:c198e21b1289c2ab85ee4e67bb4b4ef3ead0892059901a8d5b622f24a1101e90"},
     {file = "certifi-2024.7.4.tar.gz", hash = "sha256:5a1e7645bc0ec61a09e26c36f6106dd4cf40c6db3a1fb6352b0244e7fb057c7b"},
@@ -625,7 +625,7 @@ name = "exceptiongroup"
 version = "1.2.2"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
-groups = ["adapters", "extra", "tests"]
+groups = ["default", "adapters", "extra", "tests"]
 marker = "python_version < \"3.11\""
 files = [
     {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
@@ -748,7 +748,7 @@ name = "h11"
 version = "0.14.0"
 requires_python = ">=3.7"
 summary = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
-groups = ["extra", "tests"]
+groups = ["default", "extra", "tests"]
 dependencies = [
     "typing-extensions; python_version < \"3.8\"",
 ]
@@ -762,7 +762,7 @@ name = "httpcore"
 version = "1.0.5"
 requires_python = ">=3.8"
 summary = "A minimal low-level HTTP client."
-groups = ["extra", "tests"]
+groups = ["default", "extra", "tests"]
 dependencies = [
     "certifi",
     "h11<0.15,>=0.13",
@@ -808,7 +808,7 @@ name = "httpx"
 version = "0.27.0"
 requires_python = ">=3.8"
 summary = "The next generation HTTP client."
-groups = ["extra", "tests"]
+groups = ["default", "extra", "tests"]
 dependencies = [
     "anyio",
     "certifi",
@@ -2024,7 +2024,7 @@ name = "sniffio"
 version = "1.3.1"
 requires_python = ">=3.7"
 summary = "Sniff out which async library your code is running under"
-groups = ["adapters", "extra", "tests"]
+groups = ["default", "adapters", "extra", "tests"]
 files = [
     {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
     {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
