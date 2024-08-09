@@ -2,7 +2,7 @@ from datetime import datetime
 
 from nonebot_plugin_htmlrender import template_to_pic, template_to_html
 
-from .shema import WakaTime
+from .schema import WakaTime
 from .config import RESOURCES_DIR, TEMPLATES_DIR, CustomSource, config
 from .utils import image_to_base64, get_lolicon_image, calc_work_time_percentage
 
