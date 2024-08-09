@@ -156,13 +156,14 @@ wakatime__redirect_uri = https://example.com:8080/wakatime/register
 在配置文件中设置 `wakatime__background_source` 为 `CustomSource`结构的字典
   
   ```env
-  wakatime__background_source = '{"url": "https://example.com/image.jpg"}'
+  wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
   ```
 
 其中
-- `url` 可为网络图片 API，只要返回的是图片即可
-- `url` 也可以为 base64 编码的图片，如 `data:image/png;base64,xxxxxx` ~（一般也没人这么干）~
-- `url` 也可以为本地图片路径，如 `imgs/image.jpg`、`/path/to/image.jpg`
+
+- `uri` 可为网络图片 API，只要返回的是图片即可
+- `uri` 也可以为 base64 编码的图片，如 `data:image/png;base64,xxxxxx` ~（一般也没人这么干）~
+- `uri` 也可以为本地图片路径，如 `imgs/image.jpg`、`/path/to/image.jpg`
 - 如果本地图片路径是相对路径，会使用 [`nonebot-plugin-localstore`](https://github.com/nonebot/plugin-localstore) 指定的 data 目录作为根目录
 - 如果本地图片路径是目录，会随机选择目录下的一张图片作为背景图
 
