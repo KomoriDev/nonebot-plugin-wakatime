@@ -22,6 +22,11 @@ _✨ NoneBot Wakatime 查询插件 ✨_
   <img src="https://img.shields.io/badge/Alconna-resolved-2564C2" alt="alc-resolved">
 </a>
 
+<br/>
+
+[![NoneBot Registry](https://img.shields.io/endpoint?url=https%3A%2F%2Fnbbdg.lgc2333.top%2Fplugin%2Fnonebot-plugin-wakatime)](https://registry.nonebot.dev/plugin/nonebot-plugin-wakatime:nonebot_plugin_wakatime)
+[![Supported Adapters](https://img.shields.io/endpoint?url=https%3A%2F%2Fnbbdg.lgc2333.top%2Fplugin-adapters%2Fnonebot-plugin-wakatime)](https://registry.nonebot.dev/plugin/nonebot-plugin-alconna:nonebot_plugin_alconna)
+
 </div>
 
 ## 📖 介绍
