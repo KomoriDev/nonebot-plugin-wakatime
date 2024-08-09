@@ -1,6 +1,8 @@
+import os
 import asyncio
-from urllib.parse import parse_qs
+import hashlib
 
+from yarl import URL
 from nonebot import require
 from nonebot.rule import Rule
 from nonebot.log import logger
@@ -22,8 +24,9 @@ from .models import User
 from .config import Config
 from .shema import WakaTime
 from .render_pic import render
-from .exception import UserUnboundException
-from .config import config as wakatime_config
+from .mount import State, WaitingRecord, waiting_codes
+from .exception import BindUserException, UserUnboundException
+from .bootstrap import client_id, mountable, redirect_uri, plugin_enable
 
 __plugin_meta__ = PluginMetadata(
     name="谁是卷王",
@@ -43,18 +46,10 @@ __plugin_meta__ = PluginMetadata(
     },
 )
 
-client_id = wakatime_config.client_id
-client_secret = wakatime_config.client_secret
-redirect_uri = wakatime_config.redirect_uri
-
-if client_id == "" or client_secret == "" or redirect_uri == "":
-    logger.warning("缺失必要配置项，已禁用该插件")
-
 
 def is_enable() -> Rule:
-
     def _rule() -> bool:
-        return client_id != "" and client_secret != "" and redirect_uri != ""
+        return plugin_enable
 
     return Rule(_rule)
 
@@ -82,7 +77,7 @@ async def _(user_session: UserSession, target: Match[At | int]):
         else:
             target_name = "他"
             target_platform_id = target.result
-        target_id = (await get_user(user_session.platform, target_platform_id)).id
+        target_id = (await get_user(user_session.platform, str(target_platform_id))).id
     else:
         target_name = "你"
         target_id = user_session.user_id
@@ -120,7 +115,6 @@ async def _(
     msg_target: MsgTarget,
     session: async_scoped_session,
 ):
-
     if await session.get(User, user_session.user_id):
         await UniMessage("已绑定过 wakatime 账号").finish(at_sender=True)
 
@@ -128,31 +122,40 @@ async def _(
         await UniMessage("绑定指令只允许在私聊中使用").finish(at_sender=True)
 
     if not code.available:
-        auth_url = (
-            f"https://wakatime.com/oauth/authorize?client_id={client_id}&response_type=code"
-            f"&redirect_uri={redirect_uri}&scope=read_stats"
+        state = hashlib.sha1(os.urandom(40)).hexdigest()
+
+        auth_url = URL("https://wakatime.com/oauth/authorize").with_query(
+            {
+                "client_id": client_id,
+                "response_type": "code",
+                "redirect_uri": redirect_uri,
+                "scope": "read_stats",
+                "state": state,
+            }
         )
+
+        waiting_codes[State(state)] = WaitingRecord(user_session.user, msg_target)
 
         await (
             UniMessage.text(f"前往该页面绑定 wakatime 账号：{auth_url}")
-            .keyboard(Button("link", label="即刻前往", url=auth_url))
+            .text(
+                "\n请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
+                if not mountable
+                else ""
+            )
+            .keyboard(Button("link", label="即刻前往", url=auth_url.human_repr()))
             .finish(at_sender=True, fallback=FallbackStrategy.ignore)
         )
 
-    resp = await API.bind_user(code.result)
+    try:
+        user_without_id = await API.bind_user(code.result)
 
-    if resp.status_code == 200:
-        parsed_data = parse_qs(resp.text)
-        user = User(
-            id=user_session.user_id,
-            access_token=parsed_data["access_token"][0],
-        )
-        session.add(user)
+        session.add(user_without_id(id=user_session.user_id))
         await session.commit()
         await UniMessage("绑定成功").finish(at_sender=True)
-
-    logger.error(f"用户 {user_session.user_id} 绑定失败。状态码：{resp.status_code}")
-    await UniMessage("绑定失败").finish(at_sender=True)
+    except BindUserException:
+        logger.exception(f"用户 {user_session.user_id} 绑定失败。")
+        await UniMessage("绑定失败").finish(at_sender=True)
 
 
 @wakatime.assign("revoke")
