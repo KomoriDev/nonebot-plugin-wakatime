@@ -81,12 +81,15 @@ plugins = ["nonebot_plugin_wakatime"]
 
 > [!NOTE]
 >
-> `redirect_uri` 指绑定后跳转的页面，可以使用 `https://wakatime.com/oauth/test` 和个人域名
+> `redirect_uri` 指绑定后跳转的页面，可以使用 WakaTime 域名和个人域名
 
 #### 使用 WakaTime 域名
 
 - 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://wakatime.com/oauth/test`
-- 在项目配置文件中写入：`wakatime__redirect_uri = https://wakatime.com/oauth/test`
+- 在项目配置文件中写入：
+  ```env
+  wakatime__redirect_uri = https://wakatime.com/oauth/test
+  ```
 
 #### 使用个人域名
 
@@ -97,7 +100,10 @@ plugins = ["nonebot_plugin_wakatime"]
 - 使用 nb-cli 安装客户端类型驱动器：`nb driver install httpx`
 - 在项目配置文件中写入：`driver=~fastapi+~httpx`
 - 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://<your-domain>/wakatime/register`
-- 在项目配置文件中写入：`wakatime__redirect_uri = https://<your-domain>/wakatime/register`
+- 在项目配置文件中写入：
+  ```env
+  wakatime__redirect_uri = https://<your-domain>/wakatime/register
+  ```
 
 ### background_source
 
