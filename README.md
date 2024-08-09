@@ -87,6 +87,7 @@ plugins = ["nonebot_plugin_wakatime"]
 
 - 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://wakatime.com/oauth/test`
 - 在项目配置文件中写入：
+
   ```env
   wakatime__redirect_uri = https://wakatime.com/oauth/test
   ```
@@ -101,6 +102,7 @@ plugins = ["nonebot_plugin_wakatime"]
 - 在项目配置文件中写入：`driver=~fastapi+~httpx`
 - 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://<your-domain>/wakatime/register`
 - 在项目配置文件中写入：
+
   ```env
   wakatime__redirect_uri = https://<your-domain>/wakatime/register
   ```
