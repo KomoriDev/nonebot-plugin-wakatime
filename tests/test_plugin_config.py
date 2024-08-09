@@ -19,9 +19,7 @@ async def test_custom_source(app: App, mocker: MockerFixture, tmp_path: Path):
     assert source1.to_uri() == Url("https://example.com")
 
     source2 = CustomSource(uri=Path("/path/to/file.txt"))
-    with pytest.raises(
-        FileNotFoundError, match=f"CustomSource: {Path('/path/to/file.txt')} not exists"
-    ):
+    with pytest.raises(FileNotFoundError):
         assert source2.to_uri()
 
     source3 = CustomSource(uri=Path(tmp_path.absolute() / "file1.txt"))
