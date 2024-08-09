@@ -9,7 +9,7 @@
 
 # NoneBot-Plugin-Wakatime
 
-_✨ NoneBot Wakatime 查询插件✨_
+_✨ NoneBot Wakatime 查询插件 ✨_
 
 <a href="">
   <img src="https://img.shields.io/pypi/v/nonebot-plugin-wakatime.svg" alt="pypi" />
@@ -62,19 +62,59 @@ plugins = ["nonebot_plugin_wakatime"]
 
 ## ⚙️ 配置
 
+### 驱动器配置
+
+Wakatime 插件需要项目支持客户端型驱动器，因此需要在配置文件中添加相关配置项。具体的配置方法可以参考[配置驱动器](https://nonebot.dev/docs/advanced/driver#配置驱动器)。
+
+同时，如果项目还支持服务端型驱动器，则插件还可以通过配置项来自动注册用户。具体的配置方法可以参考[启用自动注册](#启用自动注册)。
+
+下面是一个同时支持客户端/服务端型驱动器的配置示例：
+
+```env
+DRIVER=~fastapi+~httpx
+```
+
+### 插件配置
+
 在项目的配置文件中添加下表中的可选配置
 
 > [!note]
 > `client_id` 和 `client_secret` 均从 [WakaTime App](https://wakatime.com/apps) 获取  
-> `redirect_uri` 即绑定成功后跳转的页面。需在 [WakaTime App](https://wakatime.com/apps) 配置（只配置一个即可）
+> `redirect_uri` 即绑定成功后跳转的页面。需先在 [WakaTime App](https://wakatime.com/apps) 配置才能使用（只配置一个即可）  
+> 可使用`https://wakatime.com/oauth/test`或者参考 [启用自动注册](#启用自动注册)
 
-|             配置项             | 必填 |              默认值              |
-|:---------------------------:|:--:|:-----------------------------:|
-|     wakatime__client_id     | 是  |               无               |
-|   wakatime__client_secret   | 是  |               无               |
-|   wakatime__redirect_uri    | 是  |               无               |
-|      wakatime__api_url      | 否  | <https://wakatime.com/api/v1> |
-| wakatime__background_source | 否  |            default            |
+|            配置项             | 必填 |            默认值             |
+| :---------------------------: | :--: | :---------------------------: |
+|     wakatime\_\_client_id     |  是  |              无               |
+|   wakatime\_\_client_secret   |  是  |              无               |
+|   wakatime\_\_redirect_uri    |  是  |              无               |
+|      wakatime\_\_api_url      |  否  | <https://wakatime.com/api/v1> |
+|  wakatime\_\_register_route   |  否  |      /wakatime/register       |
+| wakatime\_\_background_source |  否  |            default            |
+
+### 启用自动注册
+
+如果 Nonebot driver 支持服务端型驱动器，可以通过以下配置项启用自动注册
+
+- 假设 bot 所在服务器的域名为 `example.com`
+- 假设 bot 的端口为 `8080`，并且已经开放
+- 假设`wakatime__register_route` 为 `/wakatime/register`
+
+则你可以在 `WakaTime App` 的 `redirect_uri` 中填写
+
+```text
+http://example.com:8080/wakatime/register
+```
+
+然后在配置文件中添加以下配置项
+
+```env
+wakatime__redirect_uri = https://example.com:8080/wakatime/register
+```
+
+> [!note]
+> 如果域名支持 HTTPS，将 `http` 替换为 `https`  
+> 如果你想直接使用服务器的 IP 地址（不推荐），可以将 `example.com` 替换为服务器的 IP 地址，并确保其为公网 IP
 
 `wakatime__background_source` 为背景图来源，可选值为字面量`default`/`LoliAPI`/`Lolicon` 或者结构 `CustomSource` ，默认为 `default`。
 
@@ -83,16 +123,15 @@ plugins = ["nonebot_plugin_wakatime"]
 ## 🎉 使用
 
 > [!note]
-> 请注意你的 `COMMAND_START` 以及上述配置项。
+> 假设你的命令前缀为 `/`  
+> 请检查你的 `COMMAND_START` 以及上述配置项。
 
 ### 绑定账号
 
-> [!important]
-> 首次绑定时向 Bot 发送 `/wakatime bind`，跟随链接指引进行绑定，成功后会跳转到 `redirect_uri` 处，`code` 会附加在 `redirect_uri` 后面。再次发送 `/wakatime bind <code>` 即可完成绑定。
+首次绑定时向 Bot 发送 `/wakatime bind`，跟随链接指引进行绑定，成功后会跳转到 `redirect_uri` 处
 
-```shell
-/wakatime -b|--bind|bind [code]
-```
+- 如果已经[启用自动注册](#启用自动注册)，则无需继续操作，bot 会自动在你访问绑定链接后注册用户并发送绑定成功消息
+- 如果未启用自动注册，则需要手动绑定，复制访问后链接或者绑定页面中的 code 参数，发送 `/wakatime bind [code]` 绑定
 
 ### 解绑
 

@@ -9,7 +9,7 @@ from nonebot.adapters.onebot.v11 import Adapter as OneBotV11Adapter
 
 def pytest_configure(config: pytest.Config):
     config.stash[NONEBOT_INIT_KWARGS] = {
-        "driver": "~fastapi",
+        "driver": "~fastapi+~httpx",
         "log_level": "DEBUG",
         "command_start": {"/", ""},
         "sqlalchemy_database_url": "sqlite+aiosqlite://",
