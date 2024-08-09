@@ -7,5 +7,3 @@ class UserUnboundException(NoneBotException):
 
 class BindUserException(NoneBotException):
     """Bind User Api Failed"""
-
-    pass
