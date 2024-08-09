@@ -116,6 +116,10 @@ wakatime__redirect_uri = https://example.com:8080/wakatime/register
 > 如果域名支持 HTTPS，将 `http` 替换为 `https`  
 > 如果你想直接使用服务器的 IP 地址（不推荐），可以将 `example.com` 替换为服务器的 IP 地址，并确保其为公网 IP
 
+`wakatime__background_source` 为背景图来源，可选值为字面量`default`/`LoliAPI`/`Lolicon` 或者结构 `CustomSource` ，默认为 `default`。
+
+可参见[自定义背景图](#自定义背景图)
+
 ## 🎉 使用
 
 > [!note]
@@ -146,6 +150,22 @@ wakatime__redirect_uri = https://example.com:8080/wakatime/register
 默认背景图
 
 <img src="./docs/rendering.png" height="500" alt="rendering"/>
+
+### 自定义背景图
+
+在配置文件中设置 `wakatime__background_source` 为 `CustomSource`结构的字典
+  
+  ```env
+  wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
+  ```
+
+其中
+
+- `uri` 可为网络图片 API，只要返回的是图片即可
+- `uri` 也可以为 base64 编码的图片，如 `data:image/png;base64,xxxxxx` ~（一般也没人这么干）~
+- `uri` 也可以为本地图片路径，如 `imgs/image.jpg`、`/path/to/image.jpg`
+- 如果本地图片路径是相对路径，会使用 [`nonebot-plugin-localstore`](https://github.com/nonebot/plugin-localstore) 指定的 data 目录作为根目录
+- 如果本地图片路径是目录，会随机选择目录下的一张图片作为背景图
 
 ## 📄 许可证
 
