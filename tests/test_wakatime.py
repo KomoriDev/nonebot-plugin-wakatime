@@ -141,6 +141,10 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
         "nonebot_plugin_wakatime.render",
         return_value=FAKE_IMAGE,
     )
+    mocked_wakatime_info_background = mocker.patch(
+        "nonebot_plugin_wakatime.get_background_image",
+        return_value="https://nonebot.dev/logo.png",
+    )
 
     async with app.test_matcher(wakatime) as ctx:
         adapter = get_adapter(OneBotV11Adapter)
@@ -151,6 +155,12 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
             event,
             OneBotV11Message(OneBotV11MS.at("2310") + OneBotV11MS.image(file=FAKE_IMAGE)),
             result=True,
+            argot={
+                "name": "background",
+                "command": "background",
+                "content": "https://nonebot.dev/logo.png",
+                "expire": 300,
+            },
         )
         ctx.should_finished()
 
@@ -158,3 +168,4 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     mocked_user_stats.assert_called_once()
     mocked_all_time_since_today.assert_called_once()
     mocked_wakatime_info_image.assert_called_once()
+    mocked_wakatime_info_background.assert_called_once()
