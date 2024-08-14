@@ -3,8 +3,8 @@ from datetime import datetime
 from nonebot_plugin_htmlrender import template_to_pic, template_to_html
 
 from .schema import WakaTime
-from .config import RESOURCES_DIR, TEMPLATES_DIR, CustomSource, config
-from .utils import image_to_base64, get_lolicon_image, calc_work_time_percentage
+from .config import TEMPLATES_DIR
+from .utils import calc_work_time_percentage
 
 
 async def render(data: WakaTime) -> bytes:
@@ -13,24 +13,12 @@ async def render(data: WakaTime) -> bytes:
         data["user"]["created_at"], "%Y-%m-%dT%H:%M:%SZ"
     ).strftime("%b %d %Y")
 
-    default_background = RESOURCES_DIR / "images" / "background.png"
-
-    match config.background_source:
-        case "default":
-            background_image = image_to_base64(default_background)
-        case "LoliAPI":
-            background_image = "https://www.loliapi.com/acg/pe/"
-        case "Lolicon":
-            background_image = await get_lolicon_image()
-        case CustomSource() as cs:
-            background_image = cs.to_uri()
-
     return await template_to_pic(
         template_path=str(TEMPLATES_DIR),
         template_name="profile.html",
         templates={
             "user": data["user"],
-            "background_image": background_image,
+            "background_image": data["background_image"],
             "insights": {
                 "data": data["stats"],
                 "last_week": calc_work_time_percentage(
