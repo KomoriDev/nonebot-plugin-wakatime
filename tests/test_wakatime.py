@@ -61,21 +61,20 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
         event = fake_v11_private_message_event(message=OneBotV11Message("/waka bind"))
 
         ctx.receive_event(bot, event)
-        ctx.should_call_send(
-            event,
-            OneBotV11Message(
-                [
-                    OneBotV11MS.at("2310"),
-                    OneBotV11MS.text(f"前往该页面绑定 wakatime 账号：{auth_url}"),
-                    OneBotV11MS.text(
-                        "\n请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
-                        if not mountable
-                        else ""
-                    ),
-                ]
-            ),
-            result=True,
+
+        message = OneBotV11Message(
+            [
+                OneBotV11MS.at("2310"),
+                OneBotV11MS.text(f"前往该页面绑定 wakatime 账号：{auth_url}"),
+            ]
         )
+        if not mountable:
+            message.append(
+                OneBotV11MS.text(
+                    "请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
+                )
+            )
+        ctx.should_call_send(event, message, result=True)
         ctx.should_finished()
 
 
