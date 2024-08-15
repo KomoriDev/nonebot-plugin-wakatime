@@ -27,7 +27,7 @@ def upgrade(name: str = "") -> None:
         batch_op.alter_column(
             "access_token",
             existing_type=sa.VARCHAR(),
-            type_=sa.Text(),
+            type_=sa.Text(100),
             existing_nullable=False,
         )
 
@@ -41,7 +41,7 @@ def downgrade(name: str = "") -> None:
     with op.batch_alter_table("wakatime", schema=None) as batch_op:
         batch_op.alter_column(
             "access_token",
-            existing_type=sa.Text(),
+            existing_type=sa.Text(100),
             type_=sa.VARCHAR(),
             existing_nullable=False,
         )
