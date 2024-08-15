@@ -167,3 +167,4 @@ cython_debug/
 data/
 wakatime.db
 bot.py
+shortcut.db.**

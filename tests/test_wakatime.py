@@ -61,21 +61,20 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
         event = fake_v11_private_message_event(message=OneBotV11Message("/waka bind"))
 
         ctx.receive_event(bot, event)
-        ctx.should_call_send(
-            event,
-            OneBotV11Message(
-                [
-                    OneBotV11MS.at("2310"),
-                    OneBotV11MS.text(f"前往该页面绑定 wakatime 账号：{auth_url}"),
-                    OneBotV11MS.text(
-                        "\n请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
-                        if not mountable
-                        else ""
-                    ),
-                ]
-            ),
-            result=True,
+
+        message = OneBotV11Message(
+            [
+                OneBotV11MS.at("2310"),
+                OneBotV11MS.text(f"前往该页面绑定 wakatime 账号：{auth_url}"),
+            ]
         )
+        if not mountable:
+            message.append(
+                OneBotV11MS.text(
+                    "请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
+                )
+            )
+        ctx.should_call_send(event, message, result=True)
         ctx.should_finished()
 
 
@@ -141,6 +140,10 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
         "nonebot_plugin_wakatime.render",
         return_value=FAKE_IMAGE,
     )
+    mocked_wakatime_info_background = mocker.patch(
+        "nonebot_plugin_wakatime.get_background_image",
+        return_value="https://nonebot.dev/logo.png",
+    )
 
     async with app.test_matcher(wakatime) as ctx:
         adapter = get_adapter(OneBotV11Adapter)
@@ -151,6 +154,12 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
             event,
             OneBotV11Message(OneBotV11MS.at("2310") + OneBotV11MS.image(file=FAKE_IMAGE)),
             result=True,
+            argot={
+                "name": "background",
+                "command": "background",
+                "content": "https://nonebot.dev/logo.png",
+                "expire": 300,
+            },
         )
         ctx.should_finished()
 
@@ -158,3 +167,4 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     mocked_user_stats.assert_called_once()
     mocked_all_time_since_today.assert_called_once()
     mocked_wakatime_info_image.assert_called_once()
+    mocked_wakatime_info_background.assert_called_once()

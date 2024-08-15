@@ -8,3 +8,4 @@ class WakaTime(TypedDict):
     user: Users
     stats: Stats
     all_time_since_today: str
+    background_image: str

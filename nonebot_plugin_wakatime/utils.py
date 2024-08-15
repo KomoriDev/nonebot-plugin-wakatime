@@ -4,6 +4,9 @@ from pathlib import Path
 from typing import Literal
 
 import httpx
+from pydantic_core import Url
+
+from .config import RESOURCES_DIR, CustomSource, config
 
 
 def image_to_base64(image_path: Path) -> str:
@@ -17,6 +20,25 @@ async def get_lolicon_image() -> str:
     async with httpx.AsyncClient() as client:
         response = await client.get("https://api.lolicon.app/setu/v2")
     return response.json()["data"][0]["urls"]["original"]
+
+
+async def get_background_image() -> str | Url:
+
+    default_background = RESOURCES_DIR / "images" / "background.png"
+
+    match config.background_source:
+        case "default":
+            background_image = image_to_base64(default_background)
+        case "LoliAPI":
+            background_image = "https://www.loliapi.com/acg/pe/"
+        case "Lolicon":
+            background_image = await get_lolicon_image()
+        case CustomSource() as cs:
+            background_image = cs.to_uri()
+        case _:
+            background_image = image_to_base64(default_background)
+
+    return background_image
 
 
 def parse_time(work_time: str):

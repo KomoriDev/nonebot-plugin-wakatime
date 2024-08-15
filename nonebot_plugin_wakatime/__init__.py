@@ -11,6 +11,7 @@ from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_orm")
 require("nonebot_plugin_user")
+require("nonebot_plugin_argot")
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_htmlrender")
 require("nonebot_plugin_localstore")
@@ -25,6 +26,7 @@ from .models import User
 from .config import Config
 from .schema import WakaTime
 from .render_pic import render
+from .utils import get_background_image
 from .mount import State, WaitingRecord, waiting_codes
 from .exception import BindUserException, UserUnboundException
 from .bootstrap import client_id, mountable, redirect_uri, plugin_enable
@@ -102,11 +104,24 @@ async def _(user_session: UserSession, target: Match[At | int]):
             .finish(at_sender=True, fallback=FallbackStrategy.ignore)
         )
 
+    background_image = await get_background_image()
+
     result = WakaTime(
-        user=user_info, stats=stats_info, all_time_since_today=all_time_since_today
+        user=user_info,
+        stats=stats_info,
+        all_time_since_today=all_time_since_today,
+        background_image=str(background_image),
     )
     image = await render(result)
-    await UniMessage.image(raw=image).finish(at_sender=True)
+    await UniMessage.image(raw=image).finish(
+        at_sender=True,
+        argot={
+            "name": "background",
+            "command": "background",
+            "content": str(background_image),
+            "expire": 300,
+        },
+    )
 
 
 @wakatime.assign("bind")
