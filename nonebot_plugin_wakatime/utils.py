@@ -35,6 +35,8 @@ async def get_background_image() -> str | Url:
             background_image = await get_lolicon_image()
         case CustomSource() as cs:
             background_image = cs.to_uri()
+        case _:
+            background_image = image_to_base64(default_background)
 
     return background_image
 
