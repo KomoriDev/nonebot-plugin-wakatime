@@ -9,5 +9,5 @@ class User(Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     """User ID"""
-    access_token: Mapped[str] = mapped_column(Text(100))
+    access_token: Mapped[str] = mapped_column(Text())
     """Wakatime Access Token"""
