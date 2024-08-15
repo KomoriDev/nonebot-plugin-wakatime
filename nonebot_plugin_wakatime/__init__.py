@@ -18,7 +18,15 @@ require("nonebot_plugin_localstore")
 from nonebot_plugin_orm import async_scoped_session
 from nonebot_plugin_user import UserSession, get_user
 from nonebot_plugin_alconna.uniseg import At, Button, UniMessage, FallbackStrategy
-from nonebot_plugin_alconna import Args, Match, Option, Alconna, MsgTarget, on_alconna
+from nonebot_plugin_alconna import (
+    Args,
+    Match,
+    Option,
+    Alconna,
+    MsgTarget,
+    CommandMeta,
+    on_alconna,
+)
 
 from .apis import API
 from . import migrations
@@ -63,6 +71,12 @@ wakatime = on_alconna(
         Args["target?#目标", At | int],
         Option("-b|--bind|bind", Args["code?", str], help_text="绑定 wakatime"),
         Option("--unbind|unbind|revoke", dest="revoke", help_text="取消绑定"),
+        meta=CommandMeta(
+            description=__plugin_meta__.description,
+            usage=__plugin_meta__.usage,
+            example="/wakatime [@某人]",
+            fuzzy_match=True,
+        ),
     ),
     block=True,
     aliases={"waka"},
