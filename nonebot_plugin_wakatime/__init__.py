@@ -60,7 +60,7 @@ def is_enable() -> Rule:
 wakatime = on_alconna(
     Alconna(
         "wakatime",
-        Args["target?", At | int],
+        Args["target?#目标", At | int],
         Option("-b|--bind|bind", Args["code?", str], help_text="绑定 wakatime"),
         Option("--unbind|unbind|revoke", dest="revoke", help_text="取消绑定"),
     ),
@@ -68,6 +68,7 @@ wakatime = on_alconna(
     aliases={"waka"},
     rule=is_enable(),
     use_cmd_start=True,
+    auto_send_output=True,
 )
 
 
