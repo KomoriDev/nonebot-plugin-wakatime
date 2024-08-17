@@ -24,8 +24,25 @@ _✨ NoneBot Wakatime 查询插件 ✨_
 
 <br/>
 
-[![NoneBot Registry](https://img.shields.io/endpoint?url=https%3A%2F%2Fnbbdg.lgc2333.top%2Fplugin%2Fnonebot-plugin-wakatime)](https://registry.nonebot.dev/plugin/nonebot-plugin-wakatime:nonebot_plugin_wakatime)
-[![Supported Adapters](https://img.shields.io/endpoint?url=https%3A%2F%2Fnbbdg.lgc2333.top%2Fplugin-adapters%2Fnonebot-plugin-wakatime)](https://registry.nonebot.dev/plugin/nonebot-plugin-wakatime:nonebot_plugin_wakatime)
+<a href="https://registry.nonebot.dev/plugin/nonebot-plugin-wakatime:nonebot_plugin_wakatime">
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fnbbdg.lgc2333.top%2Fplugin%2Fnonebot-plugin-wakatime" alt="NoneBot Registry" />
+</a>
+<a href="https://registry.nonebot.dev/plugin/nonebot-plugin-wakatime:nonebot_plugin_wakatime">
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fnbbdg.lgc2333.top%2Fplugin-adapters%2Fnonebot-plugin-wakatime" alt="Supported Adapters" />
+</a>
+
+<br />
+<a href="#效果图">
+  <strong>🌎 演示与预览</strong>
+</a>
+&nbsp;&nbsp;|&nbsp;&nbsp;
+<a href="#安装">
+  <strong>📦️ 下载插件</strong>
+</a>
+&nbsp;&nbsp;|&nbsp;&nbsp;
+<a href="https://qm.qq.com/q/Vuipof2zug" target="__blank">
+  <strong>💬 加入交流群</strong>
+</a>
 
 </div>
 
