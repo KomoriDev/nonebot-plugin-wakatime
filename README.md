@@ -120,13 +120,12 @@ plugins = ["nonebot_plugin_wakatime"]
 >
 > 使用个人域名可以启用自动注册，即发送绑定指令后无需进行二次操作，用于简化绑定流程。
 
-- 使用 nb-cli 安装客户端类型驱动器：`nb driver install httpx`
-- 在项目配置文件中写入：`driver=~fastapi+~httpx`
-- 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://<your-domain>/wakatime/register`
+- 使用 nb-cli 安装[服务端类型驱动器](https://nonebot.dev/docs/next/advanced/driver#%E9%A9%B1%E5%8A%A8%E5%99%A8%E7%B1%BB%E5%9E%8B)并修改配置文件
+- 在 WakaTime App 中的 `Authorized Redirect URIs` 添加：`https://<your-domain:PORT>/wakatime/register`
 - 在项目配置文件中写入：
 
   ```env
-  wakatime__redirect_uri = https://<your-domain>/wakatime/register
+  wakatime__redirect_uri = https://<your-domain:PORT>/wakatime/register
   ```
 
 ### background_source
