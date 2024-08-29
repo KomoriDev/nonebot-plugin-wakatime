@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Literal
 
 from nonebot import logger
-from pydantic_core import Url
+from pydantic import AnyUrl as Url
 from pydantic import Field, BaseModel
 from nonebot.plugin import get_plugin_config
 import nonebot_plugin_localstore as localstore
