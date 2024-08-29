@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Literal
 
 import httpx
-from pydantic_core import Url
+from pydantic import AnyUrl as Url
 
 from .config import RESOURCES_DIR, CustomSource, config
 
