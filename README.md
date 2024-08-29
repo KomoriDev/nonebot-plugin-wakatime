@@ -182,6 +182,7 @@ wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
 ## 💖 鸣谢
 
 - [`nonebot-plugin-wordcloud`](https://github.com/he0119/nonebot-plugin-wordcloud)：适用于 NoneBot2 的词云插件
+- [`nonebot-plugin-argot`](https://github.com/KomoriDev/nonebot-plugin-argot)：提供 NoneBot2 暗语消息支持
 
 ### 贡献者们
 
