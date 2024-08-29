@@ -5,7 +5,7 @@
 groups = ["default", "adapters", "dev", "extra", "tests"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:2aeeb0eacb3f4cfac35ffc46b8bc15687db1c5a14c11b6b7b56a426e9b5d596f"
+content_hash = "sha256:acc0eae16960b1ab8cbb482d115c4ac0b862e0ac47931e0dcc31b1bbe4c69f69"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1324,7 +1324,7 @@ files = [
 
 [[package]]
 name = "nonebot-plugin-argot"
-version = "0.1.4"
+version = "0.1.5"
 requires_python = ">=3.10"
 summary = "NoneBot 暗语"
 groups = ["default"]
@@ -1335,8 +1335,8 @@ dependencies = [
     "nonebot2>=2.3.2",
 ]
 files = [
-    {file = "nonebot_plugin_argot-0.1.4-py3-none-any.whl", hash = "sha256:671bbe1c1be72eef7acc3ca3c42d64e05b1737366cc60e8a742106171c3bf2b9"},
-    {file = "nonebot_plugin_argot-0.1.4.tar.gz", hash = "sha256:3b060d69cda8892b9e4f02a47317465eecc7de69708731e0a86ff72c653e8784"},
+    {file = "nonebot_plugin_argot-0.1.5-py3-none-any.whl", hash = "sha256:c23fbe965134086e58dd210548ada179bc859f5adead487ad05746f37b039620"},
+    {file = "nonebot_plugin_argot-0.1.5.tar.gz", hash = "sha256:588ba87aa55ef8116d2f6f468702b33eee5096d036aab053aa96126aab9f83dc"},
 ]
 
 [[package]]
