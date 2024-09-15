@@ -447,6 +447,11 @@ video {
   display: none;
 }
 
+@font-face {
+  font-family: 'noto';
+  src: url('../fonts/NotoColorEmoji-Regular.ttf');
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -599,7 +604,6 @@ video {
 }
 
 .details .result {
-  margin-left: 0.25rem;
   font-size: 1rem;
   line-height: 1.5rem;
   font-weight: 500;
@@ -646,6 +650,11 @@ video {
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
 
 .mb-auto {
@@ -1012,7 +1021,7 @@ video {
 }
 
 .font-noto {
-  font-family: Noto Color Emoji, sans-serif;
+  font-family: noto, sans-serif;
 }
 
 .text-2xl {

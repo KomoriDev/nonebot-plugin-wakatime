@@ -6,7 +6,6 @@
 <head>
   <meta charset="utf-8">
   <title>Wakatime User Profile</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji" />
   <style>
     {% include "index.css" %}
   </style>
@@ -34,20 +33,20 @@
     <div class="flex items-center ml-32 mt-6">
       <h1 class="text-xl text-white font-semibold">@{{ user["username"] }}</h1>
       <div class="flex gap-2 items-center ml-3 px-3 py-0.5 bg-white rounded-tl-full rounded-tr-full rounded-br-full ">
-        <p class="text-[#4e4e4e] font-noto">🕹️ Bot of</p>
+        <p class="font-noto">🕹️</p><p class="text-[#4e4e4e]">Bot of</p>
         {{ nonebot_logo() }}
       </div>
     </div>
     <div class="details">
       <div class="content">
-        <div class="title font-noto">总计编码时间 ⏱</div><div class="result">{{ all_time_since_today }}</div>
+        <p class="title">总计编码时间<p class="mx-1 font-noto">⏱</p></p><p class="result">{{ all_time_since_today }}</p>
       </div>
       <div class="content">
-        <div class="title font-noto">注册时间 📅</div><div class="result">Joined {{ user["created_at"] }}</div>
+        <p class="title">注册时间<p class="mx-1 font-noto">📅</p></p><p class="result">Joined {{ user["created_at"] }}</p>
       </div>
       {% if operating_systems %}
         <div class="content">
-          <div class="title">常用设备 💻</div><div class="result">{{ operating_systems[0]["name"] }}</div>
+          <p class="title">常用设备<p class="mx-1 font-noto">💻</p></p><p class="result">{{ operating_systems[0]["name"] }}</p>
         </div>
       {% endif %}
     </div>
