@@ -1,3 +1,5 @@
+{% from 'icons.macros.html.jinja2' import nonebot_logo %}
+
 <!DOCTYPE html>
 
 <html lang="zh-CN">
@@ -31,7 +33,10 @@
     </div>
     <div class="flex items-center ml-32 mt-6">
       <h1 class="text-xl text-white font-semibold">@{{ user["username"] }}</h1>
-      <div class="ml-3 px-3 py-0.5 text-[#4e4e4e] bg-white rounded-tl-full rounded-tr-full rounded-br-full font-noto">🕹️ Bot of ⭕</div>
+      <div class="flex gap-2 items-center ml-3 px-3 py-0.5 bg-white rounded-tl-full rounded-tr-full rounded-br-full ">
+        <p class="text-[#4e4e4e] font-noto">🕹️ Bot of</p>
+        {{ nonebot_logo() }}
+      </div>
     </div>
     <div class="details">
       <div class="content">
