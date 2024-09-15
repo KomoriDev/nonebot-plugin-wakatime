@@ -15,7 +15,7 @@ async def render(data: WakaTime) -> bytes:
 
     return await template_to_pic(
         template_path=str(TEMPLATES_DIR),
-        template_name="profile.html",
+        template_name="profile.html.jinja2",
         templates={
             "user": data["user"],
             "background_image": data["background_image"],

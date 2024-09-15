@@ -5,7 +5,9 @@
   <meta charset="utf-8">
   <title>Wakatime User Profile</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji" />
-  <link rel="stylesheet" href="./index.css" />
+  <style>
+    {% include "index.css" %}
+  </style>
   <style>
     body::before {
       content: "";
@@ -25,7 +27,7 @@
   <!-- Profile -->
   <header class="frosted-glass relative w-auto">
     <div class="absolute -top-10 ml-6 w-24 h-24 rounded-full overflow-hidden border-4 border-white">
-      <img src="{{ user["photo"] }}" alt="Avatar" class="w-full h-full object-cover">
+      <img src="{{ user['photo'] }}" alt="Avatar" class="w-full h-full object-cover">
     </div>
     <div class="flex items-center ml-32 mt-6">
       <h1 class="text-xl text-white font-semibold">@{{ user["username"] }}</h1>
@@ -102,7 +104,7 @@
           </div>
         </div>
       {% endfor %}
-     </section>
+    </section>
   {% endif %}
 
   <!-- Languages -->
