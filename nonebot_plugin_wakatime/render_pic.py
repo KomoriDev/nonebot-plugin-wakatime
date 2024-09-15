@@ -11,7 +11,7 @@ async def render(data: WakaTime) -> bytes:
 
     data["user"]["created_at"] = datetime.strptime(
         data["user"]["created_at"], "%Y-%m-%dT%H:%M:%SZ"
-    ).strftime("%b %d %Y")
+    ).strftime("%Y-%m-%d")
 
     return await template_to_pic(
         template_path=str(TEMPLATES_DIR),

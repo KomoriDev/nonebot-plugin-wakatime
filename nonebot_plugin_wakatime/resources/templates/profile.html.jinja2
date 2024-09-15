@@ -42,7 +42,7 @@
         <p class="title">总计编码时间<p class="mx-1 font-noto">⏱</p></p><p class="result">{{ all_time_since_today }}</p>
       </div>
       <div class="content">
-        <p class="title">注册时间<p class="mx-1 font-noto">📅</p></p><p class="result">Joined {{ user["created_at"] }}</p>
+        <p class="title">注册时间<p class="mx-1 font-noto">📅</p></p><p class="result">{{ user["created_at"] }}</p>
       </div>
       {% if operating_systems %}
         <div class="content">
