@@ -168,3 +168,27 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     mocked_all_time_since_today.assert_called_once()
     mocked_wakatime_info_image.assert_called_once()
     mocked_wakatime_info_background.assert_called_once()
+
+
+async def test_get_wakatime_info_timeout(app: App, mocker: MockerFixture):
+    from httpx import ConnectTimeout
+
+    from nonebot_plugin_wakatime import wakatime
+
+    mocked_user_info = mocker.patch(
+        "nonebot_plugin_wakatime.API.get_user_info",
+        side_effect=ConnectTimeout("some reason"),
+    )
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(message=OneBotV11Message("/waka"))
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("网络超时，再试试叭"),
+            result=True,
+        )
+        ctx.should_finished()
+
+    mocked_user_info.assert_called_once()
