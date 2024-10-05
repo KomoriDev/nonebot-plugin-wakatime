@@ -38,7 +38,7 @@ from .render_pic import render
 from .utils import get_background_image
 from .mount import State, WaitingRecord, waiting_codes
 from .exception import BindUserException, UserUnboundException
-from .bootstrap import client_id, mountable, redirect_uri, plugin_enable
+from .bootstrap import client_id, mountable, redirect_uri, plugin_enable, qq_button_enable
 
 __plugin_meta__ = PluginMetadata(
     name="谁是卷王",
@@ -88,7 +88,7 @@ wakatime = on_alconna(
 
 
 @wakatime.assign("$main")
-async def _(user_session: UserSession, target: Match[At | int]):
+async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At | int]):
     if target.available:
         if isinstance(target.result, At):
             target_name = "他"
@@ -120,11 +120,10 @@ async def _(user_session: UserSession, target: Match[At | int]):
             f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"  # noqa: E501
         ).finish(at_sender=True)
     except (ConnectError, ConnectTimeout, TimeoutError):
-        await (
-            UniMessage.text("网络超时，再试试叭")
-            .keyboard(Button("input", "重试", text="/wakatime"))
-            .finish(at_sender=True, fallback=FallbackStrategy.ignore)
-        )
+        message = UniMessage.text("网络超时，再试试叭")
+        if msg_target.adapter != "QQ" or qq_button_enable:
+            message.keyboard(Button("input", "重试", text="/wakatime"))
+        await message.finish(at_sender=True, fallback=FallbackStrategy.ignore)
 
     background_image = await get_background_image()
 
@@ -175,16 +174,14 @@ async def _(
 
         waiting_codes[State(state)] = WaitingRecord(user_session.user, msg_target)
 
-        await (
-            UniMessage.text(f"前往该页面绑定 wakatime 账号：{auth_url}")
-            .text(
-                "\n请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
-                if not mountable
-                else ""
-            )
-            .keyboard(Button("link", label="即刻前往", url=auth_url.human_repr()))
-            .finish(at_sender=True, fallback=FallbackStrategy.ignore)
+        message = UniMessage.text(f"前往该页面绑定 wakatime 账号：{auth_url}").text(
+            "\n请再次输入当前命令，并将获取到的 code 作为参数传入完成绑定"
+            if not mountable
+            else ""
         )
+        if msg_target.adapter != "QQ" or qq_button_enable:
+            message.keyboard(Button("link", "即刻前往", url=auth_url.human_repr()))
+        await message.finish(at_sender=True, fallback=FallbackStrategy.ignore)
 
     try:
         user_without_id = await API.bind_user(code.result)
