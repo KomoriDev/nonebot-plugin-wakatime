@@ -50,7 +50,7 @@ async def test_bind_wakatime_private(app: App, mocker: MockerFixture):
             "client_id": "client_xxx_id",
             "response_type": "code",
             "redirect_uri": "https://xxx.com",
-            "scope": "read_stats",
+            "scope": "read_stats,read_summaries",
             "state": "state_xxx",
         }
     )
@@ -99,7 +99,7 @@ async def test_get_wakatime_info_without_binding(app: App, mocker: MockerFixture
 
 async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     from nonebot_plugin_wakatime import wakatime
-    from nonebot_plugin_wakatime.schema import Stats, Users
+    from nonebot_plugin_wakatime.schema import Stats, Users, StatsBar
 
     user = Users(
         id="48e5e537-efb7-4304-8562-132953542107",
@@ -123,6 +123,21 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
         user_id="48e5e537-efb7-4304-8562-132953542107",
         username="Komorebi",
     )
+    stats_bar = StatsBar(
+        grand_total={
+            "hours": 1,
+            "minutes": 27,
+            "total_seconds": 5261.197845,
+            "digital": "1:27",
+            "decimal": "1.45",
+            "text": "1 hr 27 mins",
+        },
+        categories=None,
+        projects=None,
+        languages=None,
+        editors=None,
+        operating_systems=None,
+    )
 
     mocked_user_info = mocker.patch(
         "nonebot_plugin_wakatime.API.get_user_info",
@@ -131,6 +146,10 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     mocked_user_stats = mocker.patch(
         "nonebot_plugin_wakatime.API.get_user_stats",
         return_value=stats,
+    )
+    mocked_user_stats_bar = mocker.patch(
+        "nonebot_plugin_wakatime.API.get_user_stats_bar",
+        return_value=stats_bar,
     )
     mocked_all_time_since_today = mocker.patch(
         "nonebot_plugin_wakatime.API.get_all_time_since_today",
@@ -165,6 +184,7 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
 
     mocked_user_info.assert_called_once()
     mocked_user_stats.assert_called_once()
+    mocked_user_stats_bar.assert_called_once()
     mocked_all_time_since_today.assert_called_once()
     mocked_wakatime_info_image.assert_called_once()
     mocked_wakatime_info_background.assert_called_once()
