@@ -60,6 +60,15 @@ class OperatingSystems(TypedDict):
     minutes: int
 
 
+class GrandTotal(TypedDict):
+    decimal: str
+    digital: str
+    hours: int
+    minutes: int
+    text: str
+    total_seconds: float
+
+
 class Stats(TypedDict):
 
     human_readable_total: str
@@ -75,3 +84,12 @@ class Stats(TypedDict):
     operating_systems: list[OperatingSystems] | None
     user_id: str
     username: str
+
+
+class StatsBar(TypedDict):
+    grand_total: GrandTotal
+    categories: list[Categories] | None
+    projects: list[Project] | None
+    editors: list[Editors] | None
+    languages: list[Languages] | None
+    operating_systems: list[OperatingSystems] | None

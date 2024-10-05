@@ -104,10 +104,16 @@ async def _(user_session: UserSession, target: Match[At | int]):
     try:
         user_info_task = API.get_user_info(target_id)
         stats_info_task = API.get_user_stats(target_id)
+        stats_bar_info_task = API.get_user_stats_bar(target_id)
         all_time_since_today_task = API.get_all_time_since_today(target_id)
 
-        user_info, stats_info, all_time_since_today = await asyncio.gather(
-            user_info_task, stats_info_task, all_time_since_today_task
+        user_info, stats_info, stats_bar_info, all_time_since_today = (
+            await asyncio.gather(
+                user_info_task,
+                stats_info_task,
+                stats_bar_info_task,
+                all_time_since_today_task,
+            )
         )
     except UserUnboundException:
         await UniMessage.text(
@@ -125,6 +131,7 @@ async def _(user_session: UserSession, target: Match[At | int]):
     result = WakaTime(
         user=user_info,
         stats=stats_info,
+        stats_bar=stats_bar_info,
         all_time_since_today=all_time_since_today,
         background_image=str(background_image),
     )
@@ -161,7 +168,7 @@ async def _(
                 "client_id": client_id,
                 "response_type": "code",
                 "redirect_uri": redirect_uri,
-                "scope": "read_stats",
+                "scope": "read_stats,read_summaries",
                 "state": state,
             }
         )

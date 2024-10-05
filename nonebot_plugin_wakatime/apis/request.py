@@ -10,7 +10,7 @@ from nonebot.drivers import Request, Response
 from ..models import User
 from ..config import config
 from ..bootstrap import driver
-from ..schema import Stats, Users
+from ..schema import Stats, Users, StatsBar
 from ..exception import BindUserException, UserUnboundException
 
 api_url = config.api_url
@@ -133,6 +133,28 @@ class API:
             )
             assert response.content
         return Stats(**(json.loads(response.content)["data"]))
+
+    @classmethod
+    async def get_user_stats_bar(cls, user_id: int) -> StatsBar | None:
+        """Get user’s coding activity today.
+
+        Args:
+            user_id: user id
+        """
+        assess_token = await cls.get_access_token(user_id)
+        try:
+            async with driver.get_session() as session:
+                response = await session.request(
+                    Request(
+                        "GET",
+                        f"{api_url}/users/current/status_bar/today",
+                        headers={"Authorization": f"Bearer {assess_token}"},
+                    )
+                )
+                assert response.content
+            return StatsBar(**(json.loads(response.content)["data"]))
+        except KeyError:
+            return None
 
     @classmethod
     async def get_all_time_since_today(cls, user_id: int) -> str:

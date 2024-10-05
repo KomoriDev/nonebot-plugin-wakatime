@@ -44,6 +44,11 @@
       <div class="content">
         <p class="title">注册时间<p class="mx-1 font-noto">📅</p></p><p class="result">{{ user["created_at"] }}</p>
       </div>
+      {% if stats_bar %}
+        <div class="content">
+          <p class="title">今日编码时间<p class="mx-1 font-noto">⏳</p></p><p class="result">{{ stats_bar["grand_total"]["text"] }}</p>
+        </div>
+      {% endif %}
       {% if operating_systems %}
         <div class="content">
           <p class="title">常用设备<p class="mx-1 font-noto">💻</p></p><p class="result">{{ operating_systems[0]["name"] }}</p>

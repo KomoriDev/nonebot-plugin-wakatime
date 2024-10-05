@@ -19,6 +19,7 @@ async def render(data: WakaTime) -> bytes:
         templates={
             "user": data["user"],
             "background_image": data["background_image"],
+            "stats_bar": data["stats_bar"],
             "insights": {
                 "data": data["stats"],
                 "last_week": calc_work_time_percentage(
