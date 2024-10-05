@@ -15,6 +15,7 @@ mountable = True
 client_id = wakatime_config.client_id
 client_secret = wakatime_config.client_secret
 redirect_uri = wakatime_config.redirect_uri
+qq_button_enable = wakatime_config.enable_qq_button
 
 if not client_id or not client_secret or not redirect_uri:
     plugin_enable = False

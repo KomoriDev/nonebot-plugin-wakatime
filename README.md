@@ -98,6 +98,7 @@ plugins = ["nonebot_plugin_wakatime"]
 |      wakatime\_\_api_url      |  否  | <https://wakatime.com/api/v1> |
 |  wakatime\_\_register_route   |  否  |      /wakatime/register       |
 | wakatime\_\_background_source |  否  |            default            |
+| wakatime\_\_enable_qq_button   |  否  |            False              |
 
 ### redirect_uri
 

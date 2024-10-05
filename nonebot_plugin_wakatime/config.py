@@ -51,6 +51,8 @@ class ScopedConfig(BaseModel):
     """wakatime api"""
     background_source: Literal["default", "LoliAPI", "Lolicon"] | CustomSource = "default"
     """Background Source"""
+    enable_qq_button: bool = False
+    """Whether to enable the QQ button"""
 
 
 class Config(BaseModel):
