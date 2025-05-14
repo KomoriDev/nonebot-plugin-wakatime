@@ -1,14 +1,14 @@
+from pathlib import Path
 from datetime import datetime
 
 from nonebot_plugin_htmlrender import template_to_pic, template_to_html
 
 from .schema import WakaTime
 from .config import TEMPLATES_DIR
-from .utils import calc_work_time_percentage
+from .utils import image_to_base64, calc_work_time_percentage
 
 
 async def render(data: WakaTime) -> bytes:
-
     data["user"]["created_at"] = datetime.strptime(
         data["user"]["created_at"], "%Y-%m-%dT%H:%M:%SZ"
     ).strftime("%Y-%m-%d")
@@ -18,7 +18,11 @@ async def render(data: WakaTime) -> bytes:
         template_name="profile.html.jinja2",
         templates={
             "user": data["user"],
-            "background_image": data["background_image"],
+            "background_image": (
+                image_to_base64(image)
+                if isinstance(image := data["background_image"], Path)
+                else image  # url
+            ),
             "stats_bar": data["stats_bar"],
             "insights": {
                 "data": data["stats"],
@@ -42,7 +46,6 @@ async def render(data: WakaTime) -> bytes:
 
 
 async def render_bind_result(status_code: int, content: str) -> str:
-
     result = "success" if status_code == 200 else "error"
 
     return await template_to_html(

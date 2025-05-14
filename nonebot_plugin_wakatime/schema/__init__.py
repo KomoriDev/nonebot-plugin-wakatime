@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing_extensions import TypedDict
 
 from .stats import Stats as Stats
@@ -10,4 +11,4 @@ class WakaTime(TypedDict):
     stats: Stats
     stats_bar: StatsBar | None
     all_time_since_today: str
-    background_image: str
+    background_image: str | Path

@@ -89,22 +89,16 @@ def test_calc_work_time_percentage():
 
 async def test_get_default_background_image(mocker: MockerFixture):
     from nonebot_plugin_wakatime.config import config
-    from nonebot_plugin_wakatime.utils import get_background_image
+    from nonebot_plugin_wakatime.utils import RESOURCES_DIR, get_background_image
 
     mocker.patch.object(config, "background_source", "default")
 
     assert config.background_source == "default"
 
-    mocked_background = mocker.patch(
-        "nonebot_plugin_wakatime.utils.image_to_base64",
-        return_value="data:image/png;base64,xxxxxx",
-    )
-
     background = await get_background_image()
 
-    assert background == "data:image/png;base64,xxxxxx"
-
-    mocked_background.assert_called_once()
+    assert isinstance(background, Path)
+    assert background == RESOURCES_DIR / "images/background.png"
 
 
 async def test_get_loliapi_background_image(mocker: MockerFixture):
@@ -117,6 +111,7 @@ async def test_get_loliapi_background_image(mocker: MockerFixture):
 
     background = await get_background_image()
 
+    assert isinstance(background, str)
     assert background == "https://www.loliapi.com/acg/pe/"
 
 
@@ -128,13 +123,10 @@ async def test_get_lolicon_background_image(mocker: MockerFixture):
 
     assert config.background_source == "Lolicon"
 
-    mocker.patch(
-        "nonebot_plugin_wakatime.utils.get_lolicon_image",
-        return_value="https: //i.pixiv.re/img-original/img/2022/05/14/13/17/34/1.png",
-    )
+    expected = "https: //i.pixiv.re/img-original/img/2022/05/14/13/17/34/1.png"
+    mocker.patch("nonebot_plugin_wakatime.utils.get_lolicon_image", return_value=expected)
 
     background = await get_background_image()
 
-    assert (
-        background == "https: //i.pixiv.re/img-original/img/2022/05/14/13/17/34/1.png"
-    )  # noqa: E501
+    assert isinstance(background, str)
+    assert background == expected

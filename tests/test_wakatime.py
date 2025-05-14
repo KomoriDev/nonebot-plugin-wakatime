@@ -1,4 +1,5 @@
 from io import BytesIO
+from datetime import timedelta
 
 from yarl import URL
 from nonebug import App
@@ -98,6 +99,9 @@ async def test_get_wakatime_info_without_binding(app: App, mocker: MockerFixture
 
 
 async def test_get_wakatime_info(app: App, mocker: MockerFixture):
+    from nonebot_plugin_argot import Argot
+    from nonebot_plugin_alconna import Image, UniMessage
+
     from nonebot_plugin_wakatime import wakatime
     from nonebot_plugin_wakatime.schema import Stats, Users, StatsBar
 
@@ -164,6 +168,20 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
         return_value="https://nonebot.dev/logo.png",
     )
 
+    def check_process_argot_message(send: UniMessage) -> UniMessage:
+        assert send[-1] == Argot(
+            name="background",
+            command="background",
+            segment=Image(url="https://nonebot.dev/logo.png"),
+            expired_at=timedelta(seconds=300),
+        )
+        return send.exclude(Argot)
+
+    mocked_process_argot_message = mocker.patch(
+        "nonebot_plugin_argot.extension.process_argot_message",
+        side_effect=check_process_argot_message,
+    )
+
     async with app.test_matcher(wakatime) as ctx:
         adapter = get_adapter(OneBotV11Adapter)
         bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
@@ -173,12 +191,6 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
             event,
             OneBotV11Message(OneBotV11MS.at("2310") + OneBotV11MS.image(file=FAKE_IMAGE)),
             result=True,
-            argot={
-                "name": "background",
-                "command": "background",
-                "content": "https://nonebot.dev/logo.png",
-                "expire": 300,
-            },
         )
         ctx.should_finished()
 
@@ -188,6 +200,7 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     mocked_all_time_since_today.assert_called_once()
     mocked_wakatime_info_image.assert_called_once()
     mocked_wakatime_info_background.assert_called_once()
+    mocked_process_argot_message.assert_called_once()
 
 
 async def test_get_wakatime_info_timeout(app: App, mocker: MockerFixture):
