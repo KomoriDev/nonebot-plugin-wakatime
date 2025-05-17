@@ -50,6 +50,19 @@ _✨ NoneBot Wakatime 查询插件 ✨_
 
 NoneBot Wakatime 查询插件。将你的代码统计嵌入 Bot 中
 
+> [!IMPORTANT]
+> **收藏项目**，你将从 GitHub 上无延迟地接收所有发布通知～⭐️
+
+<img width="100%" src="https://starify.komoridevs.icu/api/starify?owner=KomoriDev&repo=nonebot-plugin-wakatime" alt="starify" />
+
+<details>
+  <summary><kbd>Star History</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=KomoriDev/nonebot-plugin-wakatime&theme=dark&type=Date" />
+    <img width="100%" src="https://star-history.com/#KomoriDev/nonebot-plugin-wakatime&Date" />
+  </picture>
+</details>
+
 ## 💿 安装
 
 以下提到的方法任选 **其一** 即可
@@ -196,8 +209,9 @@ wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
 
 ## 💖 鸣谢
 
-- [`nonebot-plugin-wordcloud`](https://github.com/he0119/nonebot-plugin-wordcloud)：适用于 NoneBot2 的词云插件
-- [`nonebot-plugin-argot`](https://github.com/KomoriDev/nonebot-plugin-argot)：提供 NoneBot2 暗语消息支持
+- [`he0119/nonebot-plugin-wordcloud`](https://github.com/he0119/nonebot-plugin-wordcloud)：适用于 NoneBot2 的词云插件
+- [`KomoriDev/nonebot-plugin-argot`](https://github.com/KomoriDev/nonebot-plugin-argot)：提供 NoneBot2 暗语消息支持
+- [`KomoriDev/Starify`](https://github.com/KomoriDev/Starify)：提供了引人注目的徽章
 
 ### 贡献者们
 
