@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Literal
 
 import httpx
-from pydantic import AnyUrl as Url
 
 from .config import RESOURCES_DIR, CustomSource, config
 
@@ -22,27 +21,27 @@ async def get_lolicon_image() -> str:
     return response.json()["data"][0]["urls"]["original"]
 
 
-async def get_background_image() -> str | Url:
-
+async def get_background_image() -> str | Path:
     default_background = RESOURCES_DIR / "images" / "background.png"
 
     match config.background_source:
         case "default":
-            background_image = image_to_base64(default_background)
+            background_image = default_background
         case "LoliAPI":
             background_image = "https://www.loliapi.com/acg/pe/"
         case "Lolicon":
             background_image = await get_lolicon_image()
         case CustomSource() as cs:
-            background_image = cs.to_uri()
+            background_image = cs.get()
+            if not isinstance(background_image, Path):
+                background_image = str(background_image)
         case _:
-            background_image = image_to_base64(default_background)
+            background_image = default_background
 
     return background_image
 
 
 def parse_time(work_time: str):
-
     patterns = {
         "hrs": r"(\d+)\s*hrs?",
         "mins": r"(\d+)\s*mins?",
@@ -68,7 +67,6 @@ def parse_time(work_time: str):
 def calc_work_time_percentage(
     work_time: str, *, duration: Literal["day", "week", "month"] = "week"
 ):
-
     if duration == "day":
         total_minutes = 24 * 60
     elif duration == "week":

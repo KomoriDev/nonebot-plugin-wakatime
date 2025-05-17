@@ -1,8 +1,12 @@
+import itertools
 from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from nonebot.adapters.onebot.v11 import GroupMessageEvent as V11GroupMessageEvent
     from nonebot.adapters.onebot.v11 import PrivateMessageEvent as V11PrivateMessageEvent
+
+# nonebot_plugin_alconna.extension:unimsg_cache 使用消息 ID 缓存 unimsg
+_message_id = itertools.count(10000)
 
 
 def fake_v11_group_message_event(**field) -> "V11GroupMessageEvent":
@@ -20,7 +24,7 @@ def fake_v11_group_message_event(**field) -> "V11GroupMessageEvent":
         user_id: int = 2310
         message_type: Literal["group"] = "group"
         group_id: int = 10000
-        message_id: int = 1
+        message_id: int = next(_message_id)
         message: Message = Message("test")
         raw_message: str = "test"
         font: int = 0
@@ -48,7 +52,7 @@ def fake_v11_private_message_event(**field) -> "V11PrivateMessageEvent":
         sub_type: str = "friend"
         user_id: int = 2310
         message_type: Literal["private"] = "private"
-        message_id: int = 1
+        message_id: int = next(_message_id)
         message: Message = Message("test")
         raw_message: str = "test"
         font: int = 0

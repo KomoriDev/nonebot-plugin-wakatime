@@ -1,6 +1,8 @@
 import os
 import asyncio
 import hashlib
+from pathlib import Path
+from datetime import timedelta
 
 from yarl import URL
 from nonebot import require
@@ -18,9 +20,11 @@ require("nonebot_plugin_htmlrender")
 require("nonebot_plugin_localstore")
 from nonebot_plugin_orm import async_scoped_session
 from nonebot_plugin_user import UserSession, get_user
+from nonebot_plugin_argot import Argot, ArgotExtension
 from nonebot_plugin_alconna.uniseg import At, Button, UniMessage, FallbackStrategy
 from nonebot_plugin_alconna import (
     Args,
+    Image,
     Match,
     Option,
     Alconna,
@@ -84,6 +88,7 @@ wakatime = on_alconna(
     rule=is_enable(),
     use_cmd_start=True,
     auto_send_output=True,
+    extensions=[ArgotExtension],
 )
 
 
@@ -107,13 +112,16 @@ async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At |
         stats_bar_info_task = API.get_user_stats_bar(target_id)
         all_time_since_today_task = API.get_all_time_since_today(target_id)
 
-        user_info, stats_info, stats_bar_info, all_time_since_today = (
-            await asyncio.gather(
-                user_info_task,
-                stats_info_task,
-                stats_bar_info_task,
-                all_time_since_today_task,
-            )
+        (
+            user_info,
+            stats_info,
+            stats_bar_info,
+            all_time_since_today,
+        ) = await asyncio.gather(
+            user_info_task,
+            stats_info_task,
+            stats_bar_info_task,
+            all_time_since_today_task,
         )
     except UserUnboundException:
         await UniMessage.text(
@@ -132,18 +140,20 @@ async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At |
         stats=stats_info,
         stats_bar=stats_bar_info,
         all_time_since_today=all_time_since_today,
-        background_image=str(background_image),
+        background_image=background_image,
     )
     image = await render(result)
-    await UniMessage.image(raw=image).finish(
-        at_sender=True,
-        argot={
-            "name": "background",
-            "command": "background",
-            "content": str(background_image),
-            "expire": 300,
-        },
+    msg = UniMessage.image(raw=image) + Argot(
+        name="background",
+        command="background",
+        segment=(
+            Image(path=background_image)
+            if isinstance(background_image, Path)
+            else Image(url=background_image)
+        ),
+        expired_at=timedelta(seconds=300),
     )
+    await msg.finish(at_sender=True)
 
 
 @wakatime.assign("bind")

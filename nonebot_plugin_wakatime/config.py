@@ -16,26 +16,29 @@ TEMPLATES_DIR: Path = RESOURCES_DIR / "templates"
 class CustomSource(BaseModel):
     uri: Url | Path
 
-    def to_uri(self) -> Url:
-        if isinstance(self.uri, Path):
-            uri = self.uri
-            if not uri.is_absolute():
-                uri = Path(localstore.get_plugin_data_dir() / uri)
+    def get(self) -> Url | Path:
+        if not isinstance(self.uri, Path):
+            return self.uri
 
-            if uri.is_dir():
-                # random pick a file
-                files = [f for f in uri.iterdir() if f.is_file()]
-                logger.debug(
-                    f"CustomSource: {uri} is a directory, random pick a file: {files}"
-                )
-                return Url((uri / random.choice(files)).as_uri())
+        uri = self.uri
+        if not uri.is_absolute():
+            uri = localstore.get_plugin_data_dir() / uri
 
-            if not uri.exists():
-                raise FileNotFoundError(f"CustomSource: {uri} not exists")
+        if uri.is_dir():
+            # pick a file randomly from the directory
+            files = [f for f in uri.iterdir() if f.is_file()]
+            if not files:
+                raise FileNotFoundError(f"CustomSource: {uri} is empty")
 
-            return Url(uri.as_uri())
+            logger.debug(
+                f"CustomSource: {uri} is a directory, random pick a file: {files}"
+            )
+            return uri / random.choice(files)
 
-        return self.uri
+        if not uri.exists():
+            raise FileNotFoundError(f"CustomSource: {uri} not exists")
+
+        return uri
 
 
 class ScopedConfig(BaseModel):

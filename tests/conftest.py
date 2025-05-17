@@ -28,9 +28,11 @@ async def app(tmp_path: Path):
     # 加载插件
     nonebot.require("nonebot_plugin_wakatime")
 
+    from nonebot_plugin_user.utils import get_user
     from nonebot_plugin_orm import init_orm, get_session
 
     await init_orm()
+    await get_user("qq", "2310")
     yield App()
 
     from nonebot_plugin_wakatime.models import User
