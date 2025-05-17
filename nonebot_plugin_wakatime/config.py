@@ -41,6 +41,11 @@ class CustomSource(BaseModel):
         return uri
 
 
+class ArgotConfig(BaseModel):
+    command: str | None = "background"
+    expire: int = 300
+
+
 class ScopedConfig(BaseModel):
     client_id: str = ""
     """Your App ID from https://wakatime.com/apps"""
@@ -61,7 +66,10 @@ class ScopedConfig(BaseModel):
 class Config(BaseModel):
     wakatime: ScopedConfig = Field(default_factory=ScopedConfig)
     """Wakatime Plugin Config"""
+    wakatime_argot: ArgotConfig = Field(default_factory=ArgotConfig)
+    """Wakatime Argot Config"""
 
 
 config = get_plugin_config(Config).wakatime
+argot_config = get_plugin_config(Config).wakatime_argot
 logger.debug(f"load plugin config: {config}")

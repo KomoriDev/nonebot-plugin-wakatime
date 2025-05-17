@@ -2,7 +2,6 @@ import os
 import asyncio
 import hashlib
 from pathlib import Path
-from datetime import timedelta
 
 from yarl import URL
 from nonebot import require
@@ -36,10 +35,10 @@ from nonebot_plugin_alconna import (
 from .apis import API
 from . import migrations
 from .models import User
-from .config import Config
 from .schema import WakaTime
 from .render_pic import render
 from .utils import get_background_image
+from .config import Config, argot_config
 from .mount import State, WaitingRecord, waiting_codes
 from .exception import BindUserException, UserUnboundException
 from .bootstrap import client_id, mountable, redirect_uri, plugin_enable, qq_button_enable
@@ -145,13 +144,13 @@ async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At |
     image = await render(result)
     msg = UniMessage.image(raw=image) + Argot(
         name="background",
-        command="background",
+        command=argot_config.command if argot_config.command else False,
         segment=(
             Image(path=background_image)
             if isinstance(background_image, Path)
             else Image(url=background_image)
         ),
-        expired_at=timedelta(seconds=300),
+        expired_at=argot_config.expire,
     )
     await msg.finish(at_sender=True)
 
