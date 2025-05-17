@@ -100,6 +100,20 @@ plugins = ["nonebot_plugin_wakatime"]
 | wakatime\_\_background_source |  否  |            default            |
 | wakatime\_\_enable_qq_button   |  否  |            False              |
 
+暗语配置：
+
+> [!tip]
+> 若禁用暗语，则将 `wakatime_argot__command` 配置为 `None`
+>
+> ```env
+> wakatime_argot__command = null
+> ```
+
+|            配置项             | 必填 |            默认值             |
+| :---------------------------: | :--: | :---------------------------: |
+|   wakatime_argot\_\_command   |  否  |           background          |
+|   wakatime_argot\_\_expire    |  否  |              300              |
+
 ### redirect_uri
 
 > [!NOTE]
