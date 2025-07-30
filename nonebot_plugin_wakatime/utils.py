@@ -2,9 +2,11 @@ import re
 import base64
 from pathlib import Path
 from typing import Literal
+from datetime import datetime, timedelta
 
 import httpx
 
+from .models import SubscriptionType
 from .config import RESOURCES_DIR, CustomSource, config
 
 
@@ -80,3 +82,28 @@ def calc_work_time_percentage(
     percentage = (total_work_minutes / total_minutes) * 100
 
     return percentage
+
+
+def get_date_range(type: SubscriptionType) -> tuple[str, str]:
+    date = datetime.now().date()
+
+    if type == "weekly":
+        start_date = date - timedelta(days=date.weekday())
+        end_date = start_date + timedelta(days=6)
+
+    elif type == "monthly":
+        start_date = date.replace(day=1)
+        if date.month == 12:
+            end_date = date.replace(year=date.year + 1, month=1, day=1) - timedelta(
+                days=1
+            )
+        else:
+            end_date = date.replace(month=date.month + 1, day=1) - timedelta(days=1)
+
+    elif type == "yearly":
+        start_date = date.replace(month=1, day=1)
+        end_date = date.replace(year=date.year + 1, month=1, day=1) - timedelta(days=1)
+    else:
+        return "Unknown", "Unknown"
+
+    return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")

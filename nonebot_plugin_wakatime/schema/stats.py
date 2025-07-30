@@ -60,6 +60,18 @@ class OperatingSystems(TypedDict):
     minutes: int
 
 
+class Machines(TypedDict):
+    name: str
+    total_seconds: float
+    percent: float
+    digital: str
+    decimal: str
+    text: str
+    hours: int
+    minutes: int
+    machine_name_id: str
+
+
 class GrandTotal(TypedDict):
     decimal: str
     digital: str
@@ -82,8 +94,10 @@ class Stats(TypedDict):
     languages: list[Languages] | None
     editors: list[Editors] | None
     operating_systems: list[OperatingSystems] | None
+    machines: list[Machines] | None
     user_id: str
     username: str
+    is_up_to_date: bool
 
 
 class StatsBar(TypedDict):
