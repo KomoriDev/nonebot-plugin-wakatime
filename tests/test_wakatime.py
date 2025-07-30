@@ -1,6 +1,7 @@
 from io import BytesIO
 from datetime import timedelta
 
+import pytest
 from yarl import URL
 from nonebug import App
 from nonebot import get_adapter
@@ -10,12 +11,27 @@ from nonebot.adapters.onebot.v11 import Adapter as OneBotV11Adapter
 from nonebot.adapters.onebot.v11 import Message as OneBotV11Message
 from nonebot.adapters.onebot.v11 import MessageSegment as OneBotV11MS
 
-from .utils import fake_v11_group_message_event, fake_v11_private_message_event
+from .utils import (
+    fake_waka_user_info,
+    fake_v11_group_message_event,
+    fake_v11_private_message_event,
+)
 
 FAKE_IMAGE = BytesIO(
     b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00"
     b"\x0cIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\r\xefF\xb8\x00\x00\x00\x00IEND\xaeB`\x82"
 )
+
+
+@pytest.fixture
+async def _database(app: App):
+    from nonebot_plugin_orm import get_session
+
+    from nonebot_plugin_wakatime.models import User
+
+    async with get_session() as session:
+        session.add(User(access_token="access_token_xxx"))
+        await session.commit()
 
 
 async def test_bind_wakatime_group(app: App):
@@ -103,45 +119,8 @@ async def test_get_wakatime_info(app: App, mocker: MockerFixture):
     from nonebot_plugin_alconna import Image, UniMessage
 
     from nonebot_plugin_wakatime import wakatime
-    from nonebot_plugin_wakatime.schema import Stats, Users, StatsBar
 
-    user = Users(
-        id="48e5e537-efb7-4304-8562-132953542107",
-        photo="https://wakatime.com/photo/48e5e537-efb7-4304-8562-132953542107",
-        last_project="nonebot-plugin-wakatime",
-        username="Komorebi",
-        created_at="2023-02-02T07:24:13Z",
-    )
-    stats = Stats(
-        human_readable_total="22 hrs 36 mins",
-        human_readable_total_including_other_language="61 hrs 31 mins",
-        daily_average=11627.0,
-        daily_average_including_other_language=31644.0,
-        human_readable_daily_average="3 hrs 13 mins",
-        human_readable_daily_average_including_other_language="8 hrs 47 mins",
-        categories=None,
-        projects=None,
-        languages=None,
-        editors=None,
-        operating_systems=None,
-        user_id="48e5e537-efb7-4304-8562-132953542107",
-        username="Komorebi",
-    )
-    stats_bar = StatsBar(
-        grand_total={
-            "hours": 1,
-            "minutes": 27,
-            "total_seconds": 5261.197845,
-            "digital": "1:27",
-            "decimal": "1.45",
-            "text": "1 hr 27 mins",
-        },
-        categories=None,
-        projects=None,
-        languages=None,
-        editors=None,
-        operating_systems=None,
-    )
+    user, stats, stats_bar = fake_waka_user_info()
 
     mocked_user_info = mocker.patch(
         "nonebot_plugin_wakatime.API.get_user_info",
@@ -225,3 +204,111 @@ async def test_get_wakatime_info_timeout(app: App, mocker: MockerFixture):
         ctx.should_finished()
 
     mocked_user_info.assert_called_once()
+
+
+async def test_subscribe_group(app: App, mocker: MockerFixture):
+    from nonebot_plugin_wakatime import wakatime
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_group_message_event(message=OneBotV11Message("/waka subscribe"))
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("订阅指令只允许在私聊中使用"),
+            result=True,
+        )
+        ctx.should_finished()
+
+
+@pytest.mark.usefixtures("_database")
+async def test_subscribe_private(app: App, mocker: MockerFixture):
+    from nonebot_plugin_wakatime import wakatime
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(
+            message=OneBotV11Message("/waka subscribe --list")
+        )
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("暂无订阅记录"),
+            result=True,
+        )
+        ctx.should_finished()
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(
+            message=OneBotV11Message("/waka subscribe")
+        )
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("订阅成功"),
+            result=True,
+        )
+        ctx.should_finished()
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(
+            message=OneBotV11Message("/waka subscribe")
+        )
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("已在当前平台订阅过该类型"),
+            result=True,
+        )
+        ctx.should_finished()
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(
+            message=OneBotV11Message("/waka subscribe --list")
+        )
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            (
+                OneBotV11MS.at("2310")
+                + OneBotV11MS.text("订阅记录：\nOneBot V11(2310): weekly")
+            ),
+            result=True,
+        )
+        ctx.should_finished()
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(
+            message=OneBotV11Message("/waka subscribe --revoke monthly")
+        )
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("未在当前平台订阅过该类型"),
+            result=True,
+        )
+        ctx.should_finished()
+
+    async with app.test_matcher(wakatime) as ctx:
+        adapter = get_adapter(OneBotV11Adapter)
+        bot = ctx.create_bot(base=OneBotV11Bot, adapter=adapter)
+        event = fake_v11_private_message_event(
+            message=OneBotV11Message("/waka subscribe --revoke weekly")
+        )
+        ctx.receive_event(bot, event)
+        ctx.should_call_send(
+            event,
+            OneBotV11MS.at("2310") + OneBotV11MS.text("取消订阅成功"),
+            result=True,
+        )
+        ctx.should_finished()

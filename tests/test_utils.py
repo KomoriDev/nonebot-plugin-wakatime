@@ -130,3 +130,27 @@ async def test_get_lolicon_background_image(mocker: MockerFixture):
 
     assert isinstance(background, str)
     assert background == expected
+
+
+async def test_get_date_range(mocker: MockerFixture):
+    from datetime import datetime
+
+    from nonebot_plugin_wakatime.utils import get_date_range
+
+    mocker.patch("nonebot_plugin_wakatime.utils.datetime")
+
+    mocker.patch(
+        "nonebot_plugin_wakatime.utils.datetime.now", return_value=datetime(2023, 10, 1)
+    )
+
+    start_date, end_date = get_date_range("weekly")
+    assert start_date == "2023-09-25"
+    assert end_date == "2023-10-01"
+
+    start_date, end_date = get_date_range("monthly")
+    assert start_date == "2023-10-01"
+    assert end_date == "2023-10-31"
+
+    start_date, end_date = get_date_range("yearly")
+    assert start_date == "2023-01-01"
+    assert end_date == "2023-12-31"

@@ -20,6 +20,10 @@ def pytest_configure(config: pytest.Config):
             "client_secret": "client_xxx_secret",
             "redirect_uri": "https://xxx.com",
         },
+        "wakatime_argot": {
+            "command": "background",
+            "expire": 300,
+        },
     }
 
 
@@ -35,10 +39,11 @@ async def app(tmp_path: Path):
     await get_user("qq", "2310")
     yield App()
 
-    from nonebot_plugin_wakatime.models import User
+    from nonebot_plugin_wakatime.models import User, Subscription
 
     async with get_session() as session, session.begin():
         await session.execute(delete(User))
+        await session.execute(delete(Subscription))
 
 
 @pytest.fixture(scope="session", autouse=True)
