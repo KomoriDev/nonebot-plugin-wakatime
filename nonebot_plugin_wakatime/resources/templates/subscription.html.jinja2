@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Wakatime Subscription</title>
+  <style>
+    body,
+    p,
+    th,
+    td,
+    h1,
+    h2,
+    h3 {
+      font-family: 'Proxima Nova', Calibri, Helvetica, sans-serif;
+      direction: ltr;
+      color: #505050;
+      line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #444444;
+    }
+
+    a {
+      color: #0080ff;
+      text-decoration: none;
+    }
+
+    table {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    td {
+      padding: 0;
+    }
+
+    .content-table {
+      width: 100%;
+      text-align: left;
+    }
+
+    .header-logo {
+      display: block;
+      border: none;
+      outline: none;
+      text-decoration: none;
+    }
+
+    .stats-value {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .stats-label {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 16px;
+      color: #838383;
+      padding-left: 2px;
+    }
+
+    .category-header,
+    .project-header,
+    .language-header,
+    .editor-header,
+    .os-header {
+      margin-top: 0;
+      margin-bottom: 2px;
+      text-decoration: underline;
+    }
+
+    .item-label {
+      padding-right: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="background-color:#ffffff;width:100%;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align:center;">
+      <tbody>
+        <tr>
+          <td align="center">
+            <table bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0" width="600" style="margin:0 auto;width:600px;min-width:600px;">
+              <tbody>
+                <tr>
+                  <td height="39" style="font-size:1px;line-height:1px;">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td align="center">
+                    <img width="60" height="60" border="0" alt="WakaTime" class="header-logo"
+                      src="https://wakatime.com/static/img/newsletters/wakatime-logo-120.png">
+                  </td>
+                </tr>
+                <tr>
+                  <td height="40" style="font-size:1px;line-height:1px;">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td align="center">
+                    <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" class="content-table">
+                      <tbody>
+                        <tr>
+                          <td width="41" style="font-size:1px;line-height:1px;">&nbsp;</td>
+                          <td style="font-size:16px;">
+                            <p style="font-size:14px;margin-top:0;margin-bottom:10px;">
+                              {{ type }} code stats for
+                              <a href="#">{{ range[0] }} until {{ range[1]}}</a>
+                            </p>
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="text-align:left;">
+                              <tbody>
+                                <tr>
+                                  <td style="text-align:left;white-space:nowrap;padding-right:8px;">
+                                    <div class="stats-value">
+                                      {{ stats["human_readable_total_including_other_language"] }}
+                                    </div>
+                                    <div class="stats-label">
+                                      total
+                                    </div>
+                                  </td>
+                                  <td style="text-align:left;white-space:nowrap;padding-left:8px;">
+                                    <div class="stats-value">
+                                      {{ stats["human_readable_daily_average_including_other_language"] }}
+                                    </div>
+                                    <div class="stats-label">daily average
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" style="text-align:left;">
+                                    <h3 class="category-header">Categories:</h3>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for categorie in stats["categories"] %}
+                                  {% if categorie["total_seconds"] > 60 %}
+                                    <tr>
+                                      <td class="item-label"><b>{{ categorie["name"] }}</b></td>
+                                      <td>{{ categorie["text"] }}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" style="text-align:left;">
+                                    <h3 class="project-header">Projects:</h3>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for project in stats["projects"] %}
+                                  {% if project["total_seconds"] > 60 %}
+                                    <tr>
+                                      <td class="item-label"><b>{{ project["name"] | truncate(50, true, '...') }}</b></td>
+                                      <td>{{ project["text"] }}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" style="text-align:left;">
+                                    <h3 class="language-header">Languages:</h3>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for language in stats["languages"] %}
+                                  {% if language["total_seconds"] > 60 %}
+                                    <tr>
+                                      <td class="item-label"><b>{{ language["name"] }}</b></td>
+                                      <td>{{ language["text"] }}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" style="text-align:left;">
+                                    <h3 class="editor-header">Editors:</h3>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for editor in stats["editors"] %}
+                                  {% if editor["total_seconds"] > 60 %}
+                                    <tr>
+                                      <td class="item-label"><b>{{ editor["name"] }}</b></td>
+                                      <td>{{ editor["text"] }}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" style="text-align:left;">
+                                    <h3 class="os-header">Operating Systems:</h3>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for operating_system in stats["operating_systems"] %}
+                                  {% if operating_system["total_seconds"] > 60 %}
+                                    <tr>
+                                      <td class="item-label"><b>{{ operating_system["name"] }}</b></td>
+                                      <td>{{ operating_system["text"] }}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                            <br>
+
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <thead>
+                                <tr>
+                                  <th colspan="2" style="text-align:left;">
+                                    <h3 class="editor-header">Machines:</h3>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for machine in stats["machines"] %}
+                                  {% if machine["total_seconds"] > 60 %}
+                                    <tr>
+                                      <td class="item-label"><b>{{ machine["name"] }}</b></td>
+                                      <td>{{ machine["text"] }}</td>
+                                    </tr>
+                                  {% endif %}
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                            <br>
+
+                          </td>
+                          <td width="41" style="font-size:1px;line-height:1px;">&nbsp;</td>
+                        </tr>
+
+                        <tr>
+                          <td height="41" colspan="3" style="font-size:1px;line-height:1px;">&nbsp;</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+</html>

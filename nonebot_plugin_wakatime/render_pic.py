@@ -3,9 +3,10 @@ from datetime import datetime
 
 from nonebot_plugin_htmlrender import template_to_pic, template_to_html
 
-from .schema import WakaTime
 from .config import TEMPLATES_DIR
-from .utils import image_to_base64, calc_work_time_percentage
+from .schema import Stats, WakaTime
+from .models import SubscriptionType
+from .utils import get_date_range, image_to_base64, calc_work_time_percentage
 
 
 async def render(data: WakaTime) -> bytes:
@@ -53,4 +54,20 @@ async def render_bind_result(status_code: int, content: str) -> str:
         template_name=f"{result}.html.jinja2",
         status_code=status_code,
         content=content,
+    )
+
+
+async def render_subscription(type: SubscriptionType, stats: Stats) -> bytes:
+    return await template_to_pic(
+        template_path=str(TEMPLATES_DIR),
+        template_name="subscription.html.jinja2",
+        templates={
+            "type": type,
+            "range": get_date_range(type),
+            "stats": stats,
+        },
+        pages={
+            "viewport": {"width": 550, "height": 10},
+            "base_url": f"file://{TEMPLATES_DIR}",
+        },
     )

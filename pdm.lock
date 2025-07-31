@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "adapters", "dev", "extra", "tests"]
+groups = ["default", "adapters", "apscheduler", "dev", "extra", "tests"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:3aa6b0ad86d34946cbd780e7cccc8eeb2fbf3d0bbdbc3fa691e0ee62a3a96c1c"
+content_hash = "sha256:3d86b94c933eae651e094767e97671e2dab0946313f7ecd1e2644c964afb5e72"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1395,7 +1395,7 @@ files = [
 
 [[package]]
 name = "nonebot-plugin-htmlrender"
-version = "0.6.5"
+version = "0.6.6"
 requires_python = "<4.0,>=3.9"
 summary = "通过浏览器渲染图片"
 dependencies = [
@@ -1409,8 +1409,8 @@ dependencies = [
     "python-markdown-math>=0.8",
 ]
 files = [
-    {file = "nonebot_plugin_htmlrender-0.6.5-py3-none-any.whl", hash = "sha256:cdfecac75eecc9509021b20482fde5058935d9797b0efd69738b4855b7ee1458"},
-    {file = "nonebot_plugin_htmlrender-0.6.5.tar.gz", hash = "sha256:1a7061f38b4817c79e8a0ca510e683a740ae350797a9575ad8207e155fe61062"},
+    {file = "nonebot_plugin_htmlrender-0.6.6-py3-none-any.whl", hash = "sha256:b0dc4130b4740fe6fda7b6c2424f277ea9d13713c74949a040512fddda92bd9a"},
+    {file = "nonebot_plugin_htmlrender-0.6.6.tar.gz", hash = "sha256:3cf3594431d995d6d960dbf445e13a88f8580f799eedc303a652f12540b8198c"},
 ]
 
 [[package]]

@@ -43,6 +43,9 @@ extra = [
     "nonebot2[fastapi]>=2.3.2",
     "nonebot-plugin-orm[aiosqlite]>=0.7.5",
 ]
+apscheduler = [
+    "nonebot-plugin-apscheduler>=0.5.0",
+]
 
 [build-system]
 requires = ["pdm-backend"]
@@ -96,6 +99,17 @@ ignore = ["E402", "C901"]
 pythonVersion = "3.10"
 pythonPlatform = "All"
 typeCheckingMode = "basic"
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "@overload",
+  "except ImportError:",
+]
+omit = ["*/migrations/*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

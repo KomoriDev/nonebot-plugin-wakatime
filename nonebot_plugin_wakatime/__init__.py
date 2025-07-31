@@ -2,6 +2,8 @@ import os
 import asyncio
 import hashlib
 from pathlib import Path
+from collections import defaultdict
+from importlib.util import find_spec
 
 from yarl import URL
 from nonebot import require
@@ -25,16 +27,27 @@ from nonebot_plugin_alconna import (
     Args,
     Image,
     Match,
+    Query,
     Option,
+    Target,
     Alconna,
     MsgTarget,
+    Subcommand,
     CommandMeta,
     on_alconna,
+    store_true,
 )
+
+if find_spec("nonebot_plugin_apscheduler"):
+    require("nonebot_plugin_apscheduler")
+    apscheduler_enable = True
+
+    from . import schedule as schedule
+else:
+    apscheduler_enable = False
 
 from .apis import API
 from . import migrations
-from .models import User
 from .schema import WakaTime
 from .render_pic import render
 from .utils import get_background_image
@@ -42,6 +55,13 @@ from .config import Config, argot_config
 from .mount import State, WaitingRecord, waiting_codes
 from .exception import BindUserException, UserUnboundException
 from .bootstrap import client_id, mountable, redirect_uri, plugin_enable, qq_button_enable
+from .models import (
+    User,
+    SubscriptionType,
+    add_subscription,
+    get_subscriptions,
+    revoke_subscription,
+)
 
 __plugin_meta__ = PluginMetadata(
     name="谁是卷王",
@@ -89,6 +109,23 @@ wakatime = on_alconna(
     auto_send_output=True,
     extensions=[ArgotExtension],
 )
+
+if apscheduler_enable:
+    wakatime.command().add(
+        Subcommand(
+            "subscribe",
+            Args["type?#订阅类型", SubscriptionType],
+            Option("-l|--list", help_text="查看订阅"),
+            Option(
+                "-r|--revoke",
+                dest="is_revoke",
+                default=False,
+                action=store_true,
+                help_text="取消订阅",
+            ),
+            help_text="代码统计订阅",
+        )
+    )
 
 
 @wakatime.assign("$main")
@@ -218,3 +255,74 @@ async def _(user_session: UserSession, session: async_scoped_session):
 
     logger.error(f"用户 {user_session.user_id} 解绑失败。状态码：{resp.status_code}")
     await UniMessage("解绑失败").finish(at_sender=True)
+
+
+@wakatime.assign("subscribe.list")
+async def _(
+    user_session: UserSession,
+    session: async_scoped_session,
+):
+    if not (user := await session.get(User, user_session.user_id)):
+        await UniMessage.text(
+            "还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"
+        ).finish(at_sender=True)
+
+    if not (subscriptions := await get_subscriptions(user.id)):
+        await UniMessage.text("暂无订阅记录").finish(at_sender=True)
+
+    platform_subscriptions: defaultdict[str, list[str]] = defaultdict(list)
+    for sub in subscriptions:
+        target_info = Target.load(sub.target)
+        key = f"{target_info.adapter}({target_info.id})"
+        platform_subscriptions[key].append(sub.type)
+
+    message = "\n".join(
+        f"{target_key}: {'; '.join(types)}"
+        for target_key, types in platform_subscriptions.items()
+    )
+
+    await UniMessage.text(f"订阅记录：\n{message}").finish(at_sender=True)
+
+
+@wakatime.assign("subscribe")
+async def _(
+    target: MsgTarget,
+    type: Match[SubscriptionType],
+    user_session: UserSession,
+    session: async_scoped_session,
+    is_revoke: Query[bool] = Query("subscribe.is_revoke.value", False),
+):
+    if not target.private:
+        await UniMessage("订阅指令只允许在私聊中使用").finish(at_sender=True)
+
+    if not (user := await session.get(User, user_session.user_id)):
+        await UniMessage.text(
+            "还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"
+        ).finish(at_sender=True)
+
+    if not type.available:
+        type.result = "weekly"
+
+    if subscriptions := await get_subscriptions(user.id):
+        current_subs = [
+            s.type for s in subscriptions if target.verify(Target.load(s.target))
+        ]
+        if not is_revoke.result and type.result in current_subs:
+            await UniMessage.text("已在当前平台订阅过该类型").finish(at_sender=True)
+        elif is_revoke.result and type.result not in current_subs:
+            await UniMessage.text("未在当前平台订阅过该类型").finish(at_sender=True)
+
+    if not is_revoke.result:
+        await add_subscription(
+            user.id,
+            type.result,
+            target,
+        )
+        await UniMessage("订阅成功").finish(at_sender=True)
+    else:
+        await revoke_subscription(
+            user.id,
+            type.result,
+            target,
+        )
+        await UniMessage("取消订阅成功").finish(at_sender=True)

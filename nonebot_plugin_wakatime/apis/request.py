@@ -132,6 +132,7 @@ class API:
                 )
             )
             assert response.content
+
         return Stats(**(json.loads(response.content)["data"]))
 
     @classmethod
