@@ -1,7 +1,7 @@
 """adapt user plugin
 
 迁移 ID: 263d60026863
-父迁移:
+父迁移: a27298ba954d
 创建时间: 2024-08-01 22:42:18.427022
 
 """
@@ -14,7 +14,7 @@ import sqlalchemy as sa
 from alembic import op
 
 revision: str = "263d60026863"
-down_revision: str | Sequence[str] | None = None
+down_revision: str | Sequence[str] | None = "a27298ba954d"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
