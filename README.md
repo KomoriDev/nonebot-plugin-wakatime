@@ -67,6 +67,9 @@ NoneBot Wakatime 查询插件。将你的代码统计嵌入 Bot 中
 
 以下提到的方法任选 **其一** 即可
 
+> [!TIP]
+> 若要启动 [订阅](#订阅) 功能，需安装 `nonebot-plugin-wakatime[apscheduler]`
+
 <details open>
 <summary>[推荐] 使用 nb-cli 安装</summary>
 在 Bot 的根目录下打开命令行, 输入以下指令即可安装
@@ -199,6 +202,15 @@ wakatime__background_source = '{"uri": "https://example.com/image.jpg"}'
 
 ```shell
 /wakatime [@]
+```
+
+### 订阅
+
+> 默认订阅为 `weekly`  
+> 取消订阅在指令后加 `-r|--revoke` 即可
+
+```shell
+/wakatime subscribe ['weekly' | 'monthly' | 'yearly']
 ```
 
 ## 📸 效果图
