@@ -100,5 +100,16 @@ pythonVersion = "3.10"
 pythonPlatform = "All"
 typeCheckingMode = "basic"
 
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "@overload",
+  "except ImportError:",
+]
+omit = ["*/migrations/*"]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
