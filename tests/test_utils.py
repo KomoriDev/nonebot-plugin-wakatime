@@ -140,17 +140,17 @@ async def test_get_date_range(mocker: MockerFixture):
     mocker.patch("nonebot_plugin_wakatime.utils.datetime")
 
     mocker.patch(
-        "nonebot_plugin_wakatime.utils.datetime.now", return_value=datetime(2023, 10, 1)
+        "nonebot_plugin_wakatime.utils.datetime.now", return_value=datetime(2025, 1, 1)
     )
 
     start_date, end_date = get_date_range("weekly")
-    assert start_date == "2023-09-25"
-    assert end_date == "2023-10-01"
+    assert start_date == "2024-12-23"
+    assert end_date == "2024-12-29"
 
     start_date, end_date = get_date_range("monthly")
-    assert start_date == "2023-10-01"
-    assert end_date == "2023-10-31"
+    assert start_date == "2024-12-01"
+    assert end_date == "2024-12-31"
 
     start_date, end_date = get_date_range("yearly")
-    assert start_date == "2023-01-01"
-    assert end_date == "2023-12-31"
+    assert start_date == "2024-01-01"
+    assert end_date == "2024-12-31"

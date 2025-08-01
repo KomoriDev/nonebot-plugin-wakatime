@@ -85,24 +85,28 @@ def calc_work_time_percentage(
 
 
 def get_date_range(type: SubscriptionType) -> tuple[str, str]:
-    date = datetime.now().date()
+    today = datetime.now().date()
 
     if type == "weekly":
-        start_date = date - timedelta(days=date.weekday())
-        end_date = start_date + timedelta(days=6)
+        last_week_end = today - timedelta(days=today.weekday() + 1)
+        last_week_start = last_week_end - timedelta(days=6)
+        start_date = last_week_start
+        end_date = last_week_end
 
     elif type == "monthly":
-        start_date = date.replace(day=1)
-        if date.month == 12:
-            end_date = date.replace(year=date.year + 1, month=1, day=1) - timedelta(
-                days=1
-            )
-        else:
-            end_date = date.replace(month=date.month + 1, day=1) - timedelta(days=1)
+        first_day_of_current_month = today.replace(day=1)
+        last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
+        first_day_of_last_month = last_day_of_last_month.replace(day=1)
+        start_date = first_day_of_last_month
+        end_date = last_day_of_last_month
 
     elif type == "yearly":
-        start_date = date.replace(month=1, day=1)
-        end_date = date.replace(year=date.year + 1, month=1, day=1) - timedelta(days=1)
+        first_day_of_current_year = today.replace(month=1, day=1)
+        last_day_of_last_year = first_day_of_current_year - timedelta(days=1)
+        first_day_of_last_year = last_day_of_last_year.replace(month=1, day=1)
+        start_date = first_day_of_last_year
+        end_date = last_day_of_last_year
+
     else:
         return "Unknown", "Unknown"
 
