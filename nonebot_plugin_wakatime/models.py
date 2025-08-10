@@ -15,7 +15,6 @@ SubscriptionType: TypeAlias = Literal[
 
 
 class User(Model):
-
     __tablename__ = "wakatime"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -25,7 +24,6 @@ class User(Model):
 
 
 class Subscription(Model):
-
     __tablename__ = "wakatime_subscription"
 
     id: Mapped[int] = mapped_column(primary_key=True)
