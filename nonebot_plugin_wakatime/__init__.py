@@ -159,6 +159,9 @@ async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At |
             stats_bar_info_task,
             all_time_since_today_task,
         )
+
+        background_image = await get_background_image()
+
     except UserUnboundException:
         await UniMessage.text(
             f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"  # noqa: E501
@@ -168,8 +171,6 @@ async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At |
         if msg_target.adapter != "QQ" or qq_button_enable:
             message.keyboard(Button("input", "重试", text="/wakatime"))
         await message.finish(at_sender=True, fallback=FallbackStrategy.ignore)
-
-    background_image = await get_background_image()
 
     result = WakaTime(
         user=user_info,
