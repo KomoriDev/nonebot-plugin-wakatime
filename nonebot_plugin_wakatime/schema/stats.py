@@ -2,7 +2,6 @@ from typing_extensions import TypedDict
 
 
 class Categories(TypedDict):
-
     name: str
     total_seconds: float
     percent: float
@@ -14,7 +13,6 @@ class Categories(TypedDict):
 
 
 class Project(TypedDict):
-
     name: str
     total_seconds: float
     percent: float
@@ -82,7 +80,6 @@ class GrandTotal(TypedDict):
 
 
 class Stats(TypedDict):
-
     human_readable_total: str
     human_readable_total_including_other_language: str
     daily_average: float
