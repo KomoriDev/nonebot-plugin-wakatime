@@ -10,7 +10,7 @@ from nonebot import require
 from nonebot.rule import Rule
 from nonebot.log import logger
 from playwright.async_api import TimeoutError
-from httpx import ConnectError, ConnectTimeout
+from httpx import ReadTimeout, ConnectError, ConnectTimeout
 from nonebot.plugin import PluginMetadata, inherit_supported_adapters
 
 require("nonebot_plugin_orm")
@@ -163,7 +163,7 @@ async def _(msg_target: MsgTarget, user_session: UserSession, target: Match[At |
         await UniMessage.text(
             f"{target_name}还没有绑定 Wakatime 账号！请私聊我并使用 /wakatime bind 命令进行绑定"  # noqa: E501
         ).finish(at_sender=True)
-    except (ConnectError, ConnectTimeout, TimeoutError):
+    except (ConnectError, ConnectTimeout, ReadTimeout, TimeoutError):
         message = UniMessage.text("网络超时，再试试叭")
         if msg_target.adapter != "QQ" or qq_button_enable:
             message.keyboard(Button("input", "重试", text="/wakatime"))
